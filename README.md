@@ -3,7 +3,7 @@
 - 工作室网站 [www.poker-x-studio.com](www.poker-x-studio.com)
 
 ## 一 功能说明:
-
+  - 横屏，ui设计分辨率 1920*1080
 
 
 ## 二 技术栈
