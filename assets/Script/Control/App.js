@@ -1,20 +1,27 @@
+
+var ViewManager = require("ViewManager");
+
 cc.Class({
     extends: cc.Component,
 
     properties: {
-        label: {
+        viewManager: {
+            type: ViewManager,
             default: null,
-            type: cc.Label
-        },
-        // defaults, set visually when attaching this script to the Canvas
-        text: 'Hello, World!'
+            tooltip:"视图管理",
+        }, 
     },
 
     // use this for initialization
     onLoad: function () {
-        this.label.string = this.text;
-    },
+        window.app = this;
+        //常驻节点
+        cc.game.addPersistRootNode(this.node);
 
+        //显示状态，帧率等
+        cc.debug.setDisplayStats(false);
+    },
+ 
     // called every frame
     update: function (dt) {
 
