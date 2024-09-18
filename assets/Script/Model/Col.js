@@ -23,6 +23,10 @@ cc.Class({
     push(node_item) {
         this.nodes.push(node_item);
     },
+    //删除最后的节点
+    pop() {
+        this.nodes.pop();
+    },
 
     //当前列的结果区
     result_area() {

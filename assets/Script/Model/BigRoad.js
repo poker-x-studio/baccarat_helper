@@ -8,7 +8,7 @@ var Col = require("Col");
 var node_item = { index: 0, bet_amount: 0, bet_area: 0, result_area: 0, };
 
 var BigRoad = {
-        
+
     properties: {
         //大路-列
         cols: {
@@ -47,6 +47,18 @@ var BigRoad = {
             var col = new Col();
             col.push(node_item)
             this.cols.push(col);
+        }
+    },
+    //删除最后的列
+    pop() {
+        if (this.col_cnt() == 0) {
+            return;
+        }
+        var last_col = this.last_col();
+        if(last_col.node_cnt() == 1) {
+            this.cols.pop();
+        } else{
+            last_col.pop();
         }
     },
 

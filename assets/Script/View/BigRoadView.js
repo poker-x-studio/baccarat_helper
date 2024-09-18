@@ -39,12 +39,14 @@ cc.Class({
     eventRegister() {
         this.eventHandler = [];
         var event_name = [
-            EVENT.EVENT_NAME_BANKER,
-            EVENT.EVENT_NAME_PLAYER,
+            EVENT.EVENT_NAME_BIG_ROAD_BANKER,
+            EVENT.EVENT_NAME_BIG_ROAD_PLAYER,
+            EVENT.EVENT_NAME_BIG_ROAD_ERASE,
         ]
         var event_handle = [
-            this.onEventUpdateBigRoad.bind(this),
-            this.onEventUpdateBigRoad.bind(this),
+            this.onEventBigRoadUpdate.bind(this),
+            this.onEventBigRoadUpdate.bind(this),
+            this.onEventBigRoadErase.bind(this),
         ]
 
         for (var i = 0; i < event_name.length; i++) {
@@ -116,7 +118,7 @@ cc.Class({
     },
 
     //事件处理-更新大路
-    onEventUpdateBigRoad(event_name, udata) {
+    onEventBigRoadUpdate(event_name, udata) {
         //需要更新的节点
         var target_index = udata;
         //网格参数
@@ -133,15 +135,27 @@ cc.Class({
 
                 if (target_index == total_index) {
                     var new_prefab = cc.instantiate(node_prefab);
-                    
+
                     new_prefab.x = grid_params.left + (i + 1) * new_prefab.width - new_prefab.width / 2;
                     new_prefab.y = grid_params.top - (j + 1) * new_prefab.height + new_prefab.height / 2;
 
                     new_prefab.getComponent('PrefabBigRoadNode').setResult(total_index, node_item.bet_area, node_item.bet_amount, node_item.result_area);
-                    this.grid.node.addChild(new_prefab, 10);
+
+                    var node_name = ""+total_index;
+                    this.grid.node.addChild(new_prefab, 10, node_name);
                 }
                 total_index += 1;
             }
         }
-    }
+    },
+    //事件处理-撤销
+    onEventBigRoadErase(event_name, udata) {
+        //需要更新的节点
+        var target_index = udata;
+        var node_name = ""+target_index;
+        var target_node = this.grid.node.getChildByName(node_name);
+        if(target_node != null){
+            this.grid.node.removeChild(target_node)
+        }
+    },
 });
