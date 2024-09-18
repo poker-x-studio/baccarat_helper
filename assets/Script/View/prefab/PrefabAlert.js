@@ -4,13 +4,13 @@
 */
 
 //弹窗停留时间
-var STAY_DURATION = 120;
+var STAY_DURATION = 10;
 
 cc.Class({
     extends: cc.Component,
 
     properties: {
-        text: {
+        label_text: {
             type:cc.Label, 
             default:null,
             tooltip:"提示信息",
@@ -23,7 +23,7 @@ cc.Class({
 
     //设置文字
     setText(text) {
-        this.text.string = text;
+        this.label_text.string = text;
     },
 
     start() {

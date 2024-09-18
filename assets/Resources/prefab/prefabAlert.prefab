@@ -39,9 +39,9 @@
     "_opacity": 255,
     "_color": {
       "__type__": "cc.Color",
-      "r": 255,
-      "g": 255,
-      "b": 255,
+      "r": 220,
+      "g": 220,
+      "b": 220,
       "a": 255
     },
     "_contentSize": {
@@ -85,7 +85,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "text",
+    "_name": "label_text",
     "_objFlags": 0,
     "_parent": {
       "__id__": 1
@@ -258,7 +258,7 @@
       "__id__": 1
     },
     "_enabled": true,
-    "text": {
+    "label_text": {
       "__id__": 3
     },
     "_id": ""

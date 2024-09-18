@@ -1,52 +1,41 @@
+/*
+功能：主视图
+说明：
+*/
 var EnumDefine = require("EnumDefine");
+var BigRoad = require("BigRoad");
+var EVENT = require("Event");
+var EventManager = require("EventManager");
 
 cc.Class({
     extends: cc.Component,
 
-    properties: {
-        circle: {
-            default: null,
-            type: cc.Graphics,
-        },           
+    properties: {        
     },
 
     // use this for initialization
     onLoad: function () {
-        window.app.viewManager.alert("ddd");
-
-        this.test_big_road_node();
+        //window.app.viewManager.alert("提示框");
     },
 
-     //弹窗
-     test_big_road_node() {
-        cc.assetManager.loadBundle("Resources", function (err, bundle) {
-            if (err) {
-                console.log('cc.assetManager.loadBundle err : ', err);
-                return;
-            }
-            bundle.load("prefab/prefabBigRoadNode", cc.prefab, function (err, prefab) {
-                if (err) {
-                    console.log('bundle.load err : ', err);
-                    return;
-                }
-                var node1 = cc.instantiate(prefab);
-                node1.x = 0;
-                node1.y = 180;
-                node1.getComponent('PrefabBigRoadNode').setInfo(1, EnumDefine.AREA_TYPE.BANKER, EnumDefine.AREA_TYPE.PLAYER);
-                cc.find('Canvas').addChild(node1, 10);
-
-                var node2 = cc.instantiate(prefab);
-                node2.x = 0;
-                node2.y = 100;
-                node2.getComponent('PrefabBigRoadNode').setInfo(2, EnumDefine.AREA_TYPE.PLAYER, EnumDefine.AREA_TYPE.PLAYER);
-                cc.find('Canvas').addChild(node2, 10);
-
-            })
-        })
-    }, 
-   
     // called every frame
     update: function (dt) {
 
     },
+    //庄家
+    onClickBanker(event, event_data) {
+        var node_item = {index:-1, bet_area:EnumDefine.AREA_TYPE.BANKER,bet_amount:100, result_area:EnumDefine.AREA_TYPE.BANKER,};
+        node_item.index = BigRoad.total_node_cnt();
+        BigRoad.push(node_item);
+
+        EventManager.dispatch_event(EVENT.EVENT_NAME_BANKER, node_item.index);
+    },
+    //闲家
+    onClickPlayer(event, event_data) {
+        var node_item = {index:-1, bet_area:EnumDefine.AREA_TYPE.BANKER,bet_amount:200, result_area:EnumDefine.AREA_TYPE.PLAYER,};
+        node_item.index = BigRoad.total_node_cnt();
+        BigRoad.push(node_item);
+
+        EventManager.dispatch_event(EVENT.EVENT_NAME_PLAYER, node_item.index);
+    },    
 });
