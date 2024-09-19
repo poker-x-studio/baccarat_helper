@@ -12,6 +12,11 @@ cc.Class({
             default: null,
             tooltip: "大路节点预制件",
         },
+        prefab_bigroad_virtual_node: {
+            type: cc.Prefab,
+            default: null,
+            tooltip: "大路虚拟节点预制件",
+        },
         prefab_bigroad_index: {
             type: cc.Prefab,
             default: null,
@@ -52,6 +57,30 @@ cc.Class({
             this.load_prefab_bigroad_node();
         }
         return this.prefab_bigroad_node;
+    },
+
+    //加载大路虚拟节点预制件
+    load_prefab_bigroad_virtual_node() {
+        cc.assetManager.loadBundle("Resources", function (err, bundle) {
+            var self = this;
+            if (err) {
+                console.log('cc.assetManager.loadBundle err : ', err);
+                return;
+            }
+            bundle.load("prefab/prefabBigRoadVirtualNode", cc.prefab, function (err, prefab) {
+                if (err) {
+                    console.log('bundle.load err : ', err);
+                    return;
+                }
+                self.prefab_bigroad_virtual_node = prefab;
+            }.bind(self));
+        }.bind(this));
+    },
+    get_prefab_bigroad_virtual_node(){
+        if(this.prefab_bigroad_virtual_node == null){
+            this.load_prefab_bigroad_virtual_node();
+        }
+        return this.prefab_bigroad_virtual_node;
     },
 
     //加载大路索引预制件

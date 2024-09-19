@@ -8,6 +8,8 @@ var EVENT = require("Event");
 var EventManager = require("EventManager");
 var BigRoad = require("BigRoad");
 var GlobalData = require("GlobalData");
+var Strategy_bet_area = require("Strategy_bet_area");
+var Utils = require("Utils");
 
 var LINE_CLR = new cc.Color().fromHEX('#DCDCDC');
 var LINE_WIDTH = 2;
@@ -35,6 +37,11 @@ cc.Class({
             default: [],
             tooltip: "大路节点列表",
         },
+        prefab_virtual_node: {
+            type: cc.Node,
+            default: null,
+            tooltip: "大路虚拟节点",
+        },
     },
 
     onLoad() {
@@ -53,15 +60,19 @@ cc.Class({
         var event_name = [
             EVENT.EVENT_NAME_BIG_ROAD_BANKER_NODE,
             EVENT.EVENT_NAME_BIG_ROAD_PLAYER_NODE,
+            EVENT.EVENT_NAME_BIG_ROAD_TIE_NODE,
             EVENT.EVENT_NAME_BIG_ROAD_ERASE_NODE,
             EVENT.EVENT_NAME_BIG_ROAD_RESET,
+            EVENT.EVENT_NAME_QUERY_VIRTUAL_NODE,
             EVENT.EVENT_NAME_BIG_ROAD_GRIDE_SIZE,
         ]
         var event_handle = [
             this.onEventBigRoadUpdate.bind(this),
             this.onEventBigRoadUpdate.bind(this),
+            this.onEventBigRoadUpdate.bind(this),
             this.onEventBigRoadEraseNode.bind(this),
             this.onEventBigRoadReset.bind(this),
+            this.onEventQueryVirtualNode.bind(this),
             this.onEventBigRoadGrideSize.bind(this),
         ]
 
@@ -196,6 +207,36 @@ cc.Class({
             }
         }
     },
+    //绘制虚拟节点
+    draw_virtual_node() {
+        if(GlobalData.virtual_node == null){
+            return ;
+        }
+
+        //网格区域参数
+        var gride_params = this.cal_gride_area_params(GlobalData.gride_size);
+        //大路虚拟节点预制件
+        var is_first_creat = false;
+        if (this.prefab_virtual_node == null) {
+            var node_prefab = window.app.resManager.get_prefab_bigroad_virtual_node();
+            //新实例
+            this.prefab_virtual_node = cc.instantiate(node_prefab);
+            is_first_creat = true;
+        }
+
+        this.prefab_virtual_node.x = GlobalData.virtual_node.x;
+        this.prefab_virtual_node.y = GlobalData.virtual_node.y;
+        //缩放
+        this.prefab_virtual_node.scaleX = gride_params.gride_width / this.prefab_virtual_node.width;
+        this.prefab_virtual_node.scaleY = gride_params.gride_height / this.prefab_virtual_node.height;
+
+        this.prefab_virtual_node.getComponent('PrefabBigRoadVirtualNode').setResult(GlobalData.virtual_node.bet_area, GlobalData.virtual_node.bet_amount);
+
+        //第一次创建
+        if (is_first_creat) {
+            this.gride_area.node.addChild(this.prefab_virtual_node, 10);
+        }
+    },
 
     //事件处理-更新大路
     onEventBigRoadUpdate(event_name, udata) {
@@ -251,6 +292,24 @@ cc.Class({
         }
         this.prefab_node_list = [];
     },
+    //事件处理-查询虚拟节点
+    onEventQueryVirtualNode(event_name, udata) {
+        GlobalData.virtual_node = Strategy_bet_area.query_virtual_node();
+
+        //插入虚拟节点
+        BigRoad.push(GlobalData.virtual_node);
+
+        //计算虚拟节点的坐标
+        var total_cnt = BigRoad.total_node_cnt();
+        var pos = this.find_node_position(BigRoad, total_cnt-1);
+        GlobalData.virtual_node.x = pos.x;
+        GlobalData.virtual_node.y = pos.y;
+        
+        //删除虚拟节点
+        BigRoad.pop();
+
+        this.draw_virtual_node();
+    },
     //事件处理-网格size
     onEventBigRoadGrideSize(event_name, udata) {
         var gride_size = udata;
@@ -277,5 +336,29 @@ cc.Class({
         this.draw_gride();
         this.draw_index();
         this.draw_node();
+
+        this.onEventQueryVirtualNode();
+        //this.draw_virtual_node();
+    },
+    //查找节点的坐标
+    find_node_position(bigroad, target_index){
+        //网格区域参数
+        var gride_params = this.cal_gride_area_params(GlobalData.gride_size);
+
+        var total_index = 0;
+        for (var i = 0; i < bigroad.col_cnt(); i++) {
+            var col = bigroad.get_col(i);
+
+            for (var j = 0; j < col.node_cnt(); j++) {
+
+                if (target_index == total_index) {
+                    var x = gride_params.left + (i + 1) * gride_params.gride_width - gride_params.gride_width / 2;
+                    var y = gride_params.top - (j + 1) * gride_params.gride_height + gride_params.gride_height / 2;
+                    return {x:x,y:y};
+                }
+                total_index += 1;
+            }
+        }
+        return {x:0,y:0};
     },
 });

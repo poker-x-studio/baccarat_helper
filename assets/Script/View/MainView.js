@@ -16,7 +16,7 @@ cc.Class({
 
     // use this for initialization
     onLoad: function () {
-        this.scheduleOnce(function() {
+        this.scheduleOnce(function () {
             EventManager.dispatch_event(EVENT.EVENT_NAME_BIG_ROAD_GRIDE_SIZE, GlobalData.gride_size);
         }.bind(this), 0.1);
 
@@ -25,8 +25,8 @@ cc.Class({
 
     // called every frame
     update: function (dt) {
-
     },
+
     //庄家
     onClickBanker(event, event_data) {
         var node_item = { index: -1, bet_area: EnumDefine.AREA_TYPE.BANKER, bet_amount: 100, result_area: EnumDefine.AREA_TYPE.BANKER, };
@@ -34,6 +34,7 @@ cc.Class({
         BigRoad.push(node_item);
 
         EventManager.dispatch_event(EVENT.EVENT_NAME_BIG_ROAD_BANKER_NODE, node_item.index);
+        EventManager.dispatch_event(EVENT.EVENT_NAME_QUERY_VIRTUAL_NODE, null);
     },
     //闲家
     onClickPlayer(event, event_data) {
@@ -42,39 +43,51 @@ cc.Class({
         BigRoad.push(node_item);
 
         EventManager.dispatch_event(EVENT.EVENT_NAME_BIG_ROAD_PLAYER_NODE, node_item.index);
+        EventManager.dispatch_event(EVENT.EVENT_NAME_QUERY_VIRTUAL_NODE, null);
+    },
+    //和
+    onClickTie(event, event_data) {
+        var node_item = { index: -1, bet_area: EnumDefine.AREA_TYPE.BANKER, bet_amount: 0, result_area: EnumDefine.AREA_TYPE.TIE, };
+        node_item.index = BigRoad.total_node_cnt();
+        BigRoad.push(node_item);
+
+        EventManager.dispatch_event(EVENT.EVENT_NAME_BIG_ROAD_TIE_NODE, node_item.index);
+        EventManager.dispatch_event(EVENT.EVENT_NAME_QUERY_VIRTUAL_NODE, null);
     },
     //撤销
-    onClickErase(event, event_data) {  
-        var node_cnt = BigRoad.total_node_cnt();   
-        if(node_cnt <= 0){
-            return ;
+    onClickErase(event, event_data) {
+        var node_cnt = BigRoad.total_node_cnt();
+        if (node_cnt <= 0) {
+            return;
         }
         BigRoad.pop();
 
-        EventManager.dispatch_event(EVENT.EVENT_NAME_BIG_ROAD_ERASE_NODE, node_cnt-1);
+        EventManager.dispatch_event(EVENT.EVENT_NAME_BIG_ROAD_ERASE_NODE, node_cnt - 1);
+        EventManager.dispatch_event(EVENT.EVENT_NAME_QUERY_VIRTUAL_NODE, null);
     },
     //清空
-    onClickReset(event, event_data) {  
-        var node_cnt = BigRoad.total_node_cnt();   
-        if(node_cnt <= 0){
-            return ;
+    onClickReset(event, event_data) {
+        var node_cnt = BigRoad.total_node_cnt();
+        if (node_cnt <= 0) {
+            return;
         }
         BigRoad.reset();
 
         EventManager.dispatch_event(EVENT.EVENT_NAME_BIG_ROAD_RESET, null);
-    },    
+        EventManager.dispatch_event(EVENT.EVENT_NAME_QUERY_VIRTUAL_NODE, null);
+    },
     //动态修改size
-    onClickMoreBigger(event, event_data) { 
+    onClickMoreBigger(event, event_data) {
         GlobalData.gride_size.width += 10;
         GlobalData.gride_size.height += 10;
         EventManager.dispatch_event(EVENT.EVENT_NAME_BIG_ROAD_GRIDE_SIZE, GlobalData.gride_size);
-    }, 
+    },
     onClickMoreSmaller(event, event_data) {
-        if( GlobalData.gride_size.width<=10){
-            return ;
-        } 
+        if (GlobalData.gride_size.width <= 10) {
+            return;
+        }
         GlobalData.gride_size.width -= 10;
         GlobalData.gride_size.height -= 10;
         EventManager.dispatch_event(EVENT.EVENT_NAME_BIG_ROAD_GRIDE_SIZE, GlobalData.gride_size);
-    },        
+    },
 });

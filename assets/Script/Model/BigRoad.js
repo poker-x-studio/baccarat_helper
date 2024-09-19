@@ -2,6 +2,8 @@
 功能：大路
 说明：大路是列的容器
 */
+var EnumDefine = require("EnumDefine");
+
 var Col = require("Col");
 
 //节点
@@ -41,7 +43,7 @@ var BigRoad = {
 
         //最后一列
         var last_col = this.last_col()
-        if (last_col.result_area() == node_item.result_area) {
+        if ((last_col.result_area()==node_item.result_area) || (node_item.result_area==EnumDefine.AREA_TYPE.TIE)) {//结果区相等或和
             last_col.push(node_item)
         } else { //新创建一列
             var col = new Col();

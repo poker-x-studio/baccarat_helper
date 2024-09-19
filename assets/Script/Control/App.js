@@ -43,6 +43,7 @@ cc.Class({
     preload_res() {
         //预加载
         window.app.resManager.load_prefab_bigroad_node();
+        window.app.resManager.load_prefab_bigroad_virtual_node();
         window.app.resManager.load_prefab_bigroad_index();
 
         //debug测试

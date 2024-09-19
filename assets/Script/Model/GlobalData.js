@@ -8,6 +8,7 @@ var GlobalData = {
 
     properties: {
         gride_size:null,
+        virtual_node:null,
     },
 
     //初始化
