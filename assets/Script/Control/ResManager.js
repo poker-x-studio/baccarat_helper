@@ -10,7 +10,12 @@ cc.Class({
         prefab_bigroad_node: {
             type: cc.Prefab,
             default: null,
-            tooltip: "大路节点预制件预制件",
+            tooltip: "大路节点预制件",
+        },
+        prefab_bigroad_index: {
+            type: cc.Prefab,
+            default: null,
+            tooltip: "大路索引预制件",
         },
         json: {
             default: {},
@@ -43,10 +48,34 @@ cc.Class({
         }.bind(this));
     },
     get_prefab_bigroad_node(){
-        if (this.prefab_bigroad_node == null ){
+        if(this.prefab_bigroad_node == null){
             this.load_prefab_bigroad_node();
         }
         return this.prefab_bigroad_node;
+    },
+
+    //加载大路索引预制件
+    load_prefab_bigroad_index() {
+        cc.assetManager.loadBundle("Resources", function (err, bundle) {
+            var self = this;
+            if (err) {
+                console.log('cc.assetManager.loadBundle err : ', err);
+                return;
+            }
+            bundle.load("prefab/prefabBigRoadIndex", cc.prefab, function (err, prefab) {
+                if (err) {
+                    console.log('bundle.load err : ', err);
+                    return;
+                }
+                self.prefab_bigroad_index = prefab;
+            }.bind(self));
+        }.bind(this));
+    },   
+    get_prefab_bigroad_index(){
+        if(this.prefab_bigroad_index == null){
+            this.load_prefab_bigroad_index();
+        }
+        return this.prefab_bigroad_index;
     },
 
     //加载配置文件

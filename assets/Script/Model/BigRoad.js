@@ -61,7 +61,10 @@ var BigRoad = {
             last_col.pop();
         }
     },
-
+    //清空
+    reset() {
+        this.init();
+    },
     //列数
     col_cnt() {
         if (this.cols == null) {

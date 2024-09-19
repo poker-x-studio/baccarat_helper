@@ -5,9 +5,6 @@
 var CONSTANTS = {
     //测试tag
     TAG: "qggame-sunday,JS project,",
-
-    BANKER_NODE :"🔴",  //庄
-	PLAYER_NODE :"🔵",  //闲
 };
 
 

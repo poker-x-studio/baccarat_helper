@@ -1,6 +1,7 @@
 
 var ViewManager = require("ViewManager");
 var ResManager = require("ResManager");
+var GlobalData = require("GlobalData");
 
 cc.Class({
     extends: cc.Component,
@@ -29,6 +30,9 @@ cc.Class({
 
         //预加载资源
         this.preload_res();
+
+        //初始化
+        GlobalData.init();
     },
 
     // called every frame
@@ -39,8 +43,12 @@ cc.Class({
     preload_res() {
         //预加载
         window.app.resManager.load_prefab_bigroad_node();
+        window.app.resManager.load_prefab_bigroad_index();
 
         //debug测试
         //this.debug_test();
+    },
+    //debug测试
+    debug_test() {
     },
 });
