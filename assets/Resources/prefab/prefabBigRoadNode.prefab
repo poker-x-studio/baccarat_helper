@@ -169,7 +169,7 @@
     "_srcBlendFactor": 770,
     "_dstBlendFactor": 771,
     "_spriteFrame": {
-      "__uuid__": "6015a735-cb11-4e8c-be8e-4db57d4b5926"
+      "__uuid__": "1d5bc48e-8a21-4de3-9bdb-de7bde8044ac"
     },
     "_type": 0,
     "_sizeMode": 0,
@@ -293,7 +293,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "label_index",
+    "_name": "label_number",
     "_objFlags": 0,
     "_parent": {
       "__id__": 6
@@ -730,7 +730,7 @@
     "circle": {
       "__id__": 10
     },
-    "label_index": {
+    "label_number": {
       "__id__": 8
     },
     "label_bet_amount": {

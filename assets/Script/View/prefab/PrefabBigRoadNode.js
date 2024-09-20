@@ -4,11 +4,8 @@
 */
 
 var EnumDefine = require("EnumDefine");
+var CONSTANTS = require("Constants");
 
-var CLR_BANKER = new cc.Color().fromHEX('#FF0000');
-var CLR_PLAYER = new cc.Color().fromHEX('#0000FF');
-var CLR_TIE = new cc.Color().fromHEX('#98C047');
-var LINE_WIDTH = 6;
 var PAIR_R = 8; //对子实心圆半径
 
 cc.Class({
@@ -20,10 +17,10 @@ cc.Class({
             default: null,
             tooltip: "圆",
         },
-        label_index: {
+        label_number: {
             type: cc.Label,
             default: null,
-            tooltip: "索引",
+            tooltip: "编号",
         },
         label_bet_amount: {
             type: cc.Label,
@@ -48,8 +45,8 @@ cc.Class({
         var ctx = this.circle.getComponent(cc.Graphics);
         var circle_clr;
         if (this.result_area & EnumDefine.AREA_TYPE.TIE) {//和
-            circle_clr = CLR_TIE;
-            ctx.lineWidth = LINE_WIDTH;
+            circle_clr = CONSTANTS.CLR_TIE;
+            ctx.lineWidth = CONSTANTS.CIRCLE_LINE_WIDTH;
             ctx.strokeColor = circle_clr;
             ctx.circle(0, 0, r);
 
@@ -59,12 +56,12 @@ cc.Class({
             ctx.stroke();  
         } else {//庄闲
             if (this.result_area & EnumDefine.AREA_TYPE.BANKER) {
-                circle_clr = CLR_BANKER;
+                circle_clr = CONSTANTS.CLR_BANKER;
             }
             if (this.result_area & EnumDefine.AREA_TYPE.PLAYER) {
-                circle_clr = CLR_PLAYER;
+                circle_clr = CONSTANTS.CLR_PLAYER;
             }
-            ctx.lineWidth = LINE_WIDTH;
+            ctx.lineWidth = CONSTANTS.CIRCLE_LINE_WIDTH;
             ctx.strokeColor = circle_clr;
             ctx.circle(0, 0, r);
             ctx.stroke();
@@ -73,14 +70,14 @@ cc.Class({
         //庄对闲对
         if (this.result_area & EnumDefine.AREA_TYPE.BANKER_PAIR) {
             ctx.lineWidth = 0;
-            ctx.fillColor = CLR_BANKER;
+            ctx.fillColor = CONSTANTS.CLR_BANKER;
             ctx.arc(-r + 2, r / 2, PAIR_R, 0, 2 * Math.PI, false);
             ctx.fill();
             ctx.stroke();
         }
         if (this.result_area & EnumDefine.AREA_TYPE.PLAYER_PAIR) {
             ctx.lineWidth = 0;
-            ctx.fillColor = CLR_PLAYER;
+            ctx.fillColor = CONSTANTS.CLR_PLAYER;
             ctx.arc(r - 2, -r / 2, PAIR_R, 0, 2 * Math.PI, false);
             ctx.fill();
             ctx.stroke();
@@ -88,8 +85,8 @@ cc.Class({
     },
 
     //设置开牌结果
-    setResult(index, bet_area, bet_amount, result_area) {
-        this.label_index.getComponent(cc.Label).string = "" + index;
+    setResult(number, bet_area, bet_amount, result_area) {
+        this.label_number.getComponent(cc.Label).string = "" + number;
 
         //对勾/叉叉
         if (result_area & EnumDefine.AREA_TYPE.TIE) {//和

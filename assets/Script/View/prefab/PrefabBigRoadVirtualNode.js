@@ -4,10 +4,8 @@
 */
 
 var EnumDefine = require("EnumDefine");
+var CONSTANTS = require("Constants");
 
-var CLR_BANKER = new cc.Color().fromHEX('#FF0000');
-var CLR_PLAYER = new cc.Color().fromHEX('#0000FF');
-var LINE_WIDTH = 6;
 var STAY_DURATION = 0.5; //停留时间
 
 cc.Class({
@@ -61,13 +59,13 @@ cc.Class({
         
         var circle_clr;
         if (this.bet_area & EnumDefine.AREA_TYPE.BANKER) {
-            circle_clr = CLR_BANKER;
+            circle_clr = CONSTANTS.CLR_BANKER;
         }
         if (this.bet_area & EnumDefine.AREA_TYPE.PLAYER) {
-            circle_clr = CLR_PLAYER;
+            circle_clr = CONSTANTS.CLR_PLAYER;
         }
 
-        ctx.lineWidth = LINE_WIDTH;
+        ctx.lineWidth = CONSTANTS.CIRCLE_LINE_WIDTH;
         ctx.strokeColor = circle_clr;
         ctx.circle(0, 0, r);
         ctx.stroke();

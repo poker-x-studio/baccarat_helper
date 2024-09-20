@@ -17,8 +17,8 @@ var GlobalData = {
     init() {
         this.unit_amount = 10;
         this.martegal_continue_lose_cnt = 4;
-        this.gride_size = {width:50, height:50,};
-        this.virtual_node = {index:0, bet_amount: 0, bet_area: 0, result_area: 0, x:0, y:0,};
+        this.gride_size = {width:40, height:40,};
+        this.virtual_node = {number:0, bet_amount: 0, bet_area: 0, result_area: 0, x:0, y:0,};
     },
 };
 

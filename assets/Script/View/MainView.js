@@ -23,38 +23,37 @@ cc.Class({
         //window.app.viewManager.alert("提示框");
     },
 
-    // called every frame
     update: function (dt) {
     },
 
     //庄家
     onClickBanker(event, event_data) {
         var virtul_bet_area = GlobalData.virtual_node.bet_area;
-        var node_item = { index: -1, bet_area: virtul_bet_area, bet_amount: 100, result_area: EnumDefine.AREA_TYPE.BANKER, };
-        node_item.index = BigRoad.total_node_cnt();
+        var node_item = { number: -1, bet_area: virtul_bet_area, bet_amount: 100, result_area: EnumDefine.AREA_TYPE.BANKER, };
+        node_item.number = BigRoad.total_node_cnt()+1;
         BigRoad.push(node_item);
 
-        EventManager.dispatch_event(EVENT.EVENT_NAME_BIG_ROAD_BANKER_NODE, node_item.index);
+        EventManager.dispatch_event(EVENT.EVENT_NAME_BIG_ROAD_BANKER_NODE, node_item.number);
         EventManager.dispatch_event(EVENT.EVENT_NAME_QUERY_VIRTUAL_NODE, null);
     },
     //闲家
     onClickPlayer(event, event_data) {
         var virtul_bet_area = GlobalData.virtual_node.bet_area;
-        var node_item = { index: -1, bet_area: virtul_bet_area, bet_amount: 200, result_area: EnumDefine.AREA_TYPE.PLAYER, };
-        node_item.index = BigRoad.total_node_cnt();
+        var node_item = { number: -1, bet_area: virtul_bet_area, bet_amount: 200, result_area: EnumDefine.AREA_TYPE.PLAYER, };
+        node_item.number = BigRoad.total_node_cnt()+1;
         BigRoad.push(node_item);
 
-        EventManager.dispatch_event(EVENT.EVENT_NAME_BIG_ROAD_PLAYER_NODE, node_item.index);
+        EventManager.dispatch_event(EVENT.EVENT_NAME_BIG_ROAD_PLAYER_NODE, node_item.number);
         EventManager.dispatch_event(EVENT.EVENT_NAME_QUERY_VIRTUAL_NODE, null);
     },
     //和
     onClickTie(event, event_data) {
         var virtul_bet_area = GlobalData.virtual_node.bet_area;
-        var node_item = { index: -1, bet_area: virtul_bet_area, bet_amount: 0, result_area: EnumDefine.AREA_TYPE.TIE, };
-        node_item.index = BigRoad.total_node_cnt();
+        var node_item = { number: -1, bet_area: virtul_bet_area, bet_amount: 0, result_area: EnumDefine.AREA_TYPE.TIE, };
+        node_item.number = BigRoad.total_node_cnt()+1;
         BigRoad.push(node_item);
 
-        EventManager.dispatch_event(EVENT.EVENT_NAME_BIG_ROAD_TIE_NODE, node_item.index);
+        EventManager.dispatch_event(EVENT.EVENT_NAME_BIG_ROAD_TIE_NODE, node_item.number);
         EventManager.dispatch_event(EVENT.EVENT_NAME_QUERY_VIRTUAL_NODE, null);
     },
     //撤销
@@ -65,7 +64,7 @@ cc.Class({
         }
         BigRoad.pop();
 
-        EventManager.dispatch_event(EVENT.EVENT_NAME_BIG_ROAD_ERASE_NODE, node_cnt - 1);
+        EventManager.dispatch_event(EVENT.EVENT_NAME_BIG_ROAD_ERASE_NODE, node_cnt);
         EventManager.dispatch_event(EVENT.EVENT_NAME_QUERY_VIRTUAL_NODE, null);
     },
     //清空

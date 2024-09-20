@@ -7,7 +7,7 @@ var EnumDefine = require("EnumDefine");
 var Col = require("Col");
 
 //节点
-var node_item = { index: 0, bet_amount: 0, bet_area: 0, result_area: 0, };
+var node_item = { number: 0, bet_amount: 0, bet_area: 0, result_area: 0, };
 
 var BigRoad = {
 
