@@ -88,7 +88,18 @@ var BigRoad = {
         }
         return this.cols[this.cols.length - 1];
     },
+    //所有的节点
+    dump_nodes() {
+        var list = [];
+        for (var i = 0; i < this.col_cnt(); i++) {
+            var col = this.cols[i];
 
+            for (var j = 0; j < col.node_cnt(); j++) {
+                list[list.length] = col.get_node(j);
+            }
+        }
+        return list;
+    },
     //总节点数
     total_node_cnt() {
         var total_cnt = 0

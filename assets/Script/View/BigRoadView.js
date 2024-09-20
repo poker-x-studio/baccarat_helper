@@ -9,6 +9,7 @@ var EventManager = require("EventManager");
 var BigRoad = require("BigRoad");
 var GlobalData = require("GlobalData");
 var Strategy_bet_area = require("Strategy_bet_area");
+var Strategy_bet_amount = require("Strategy_bet_amount");
 var Utils = require("Utils");
 
 var LINE_CLR = new cc.Color().fromHEX('#DCDCDC');
@@ -294,7 +295,17 @@ cc.Class({
     },
     //事件处理-查询虚拟节点
     onEventQueryVirtualNode(event_name, udata) {
-        GlobalData.virtual_node = Strategy_bet_area.query_virtual_node();
+        //下注额
+        var node_list = BigRoad.dump_nodes();
+        var bet_amount = Strategy_bet_amount.query_bet_amount(node_list);
+        
+        //下注区
+        var bet_area = Strategy_bet_area.query_bet_area();
+
+        //虚拟节点
+        GlobalData.virtual_node.bet_area = bet_area;
+        GlobalData.virtual_node.result_area = bet_area;
+        GlobalData.virtual_node.bet_amount = bet_amount;
 
         //插入虚拟节点
         BigRoad.push(GlobalData.virtual_node);

@@ -12,9 +12,9 @@ var Strategy_bet_area = {
     //初始化
     init() {
     },
-    //查询虚拟节点
-    query_virtual_node(){
-        return {bet_area:EnumDefine.AREA_TYPE.BANKER,bet_amount:100,result_area:EnumDefine.AREA_TYPE.BANKER,};
+    //查询下注区
+    query_bet_area(){
+        return EnumDefine.AREA_TYPE.BANKER;
     },
 };
 

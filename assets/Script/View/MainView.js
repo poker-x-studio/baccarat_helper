@@ -29,7 +29,8 @@ cc.Class({
 
     //庄家
     onClickBanker(event, event_data) {
-        var node_item = { index: -1, bet_area: EnumDefine.AREA_TYPE.BANKER, bet_amount: 100, result_area: EnumDefine.AREA_TYPE.BANKER, };
+        var virtul_bet_area = GlobalData.virtual_node.bet_area;
+        var node_item = { index: -1, bet_area: virtul_bet_area, bet_amount: 100, result_area: EnumDefine.AREA_TYPE.BANKER, };
         node_item.index = BigRoad.total_node_cnt();
         BigRoad.push(node_item);
 
@@ -38,7 +39,8 @@ cc.Class({
     },
     //闲家
     onClickPlayer(event, event_data) {
-        var node_item = { index: -1, bet_area: EnumDefine.AREA_TYPE.BANKER, bet_amount: 200, result_area: EnumDefine.AREA_TYPE.PLAYER, };
+        var virtul_bet_area = GlobalData.virtual_node.bet_area;
+        var node_item = { index: -1, bet_area: virtul_bet_area, bet_amount: 200, result_area: EnumDefine.AREA_TYPE.PLAYER, };
         node_item.index = BigRoad.total_node_cnt();
         BigRoad.push(node_item);
 
@@ -47,7 +49,8 @@ cc.Class({
     },
     //和
     onClickTie(event, event_data) {
-        var node_item = { index: -1, bet_area: EnumDefine.AREA_TYPE.BANKER, bet_amount: 0, result_area: EnumDefine.AREA_TYPE.TIE, };
+        var virtul_bet_area = GlobalData.virtual_node.bet_area;
+        var node_item = { index: -1, bet_area: virtul_bet_area, bet_amount: 0, result_area: EnumDefine.AREA_TYPE.TIE, };
         node_item.index = BigRoad.total_node_cnt();
         BigRoad.push(node_item);
 
