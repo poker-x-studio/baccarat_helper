@@ -21,6 +21,8 @@ cc.Class({
 
     // use this for initialization
     onLoad: function () {
+        cc.view.setOrientation(cc.macro.ORIENTATION_LANDSCAPE);
+
         window.app = this;
         //常驻节点
         cc.game.addPersistRootNode(this.node);
@@ -42,9 +44,7 @@ cc.Class({
     //预加载资源
     preload_res() {
         //预加载
-        window.app.resManager.load_prefab_bigroad_node();
-        window.app.resManager.load_prefab_bigroad_virtual_node();
-        window.app.resManager.load_prefab_bigroad_index();
+        window.app.resManager.preload_prefab();
 
         //debug测试
         //this.debug_test();

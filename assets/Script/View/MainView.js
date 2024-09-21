@@ -12,6 +12,21 @@ cc.Class({
     extends: cc.Component,
 
     properties: {
+        toggle_banker_pair: {
+            type: cc.Node,
+            default: null,
+            tooltip: "庄对复选框",
+        },
+        toggle_player_pair: {
+            type: cc.Node,
+            default: null,
+            tooltip: "闲对复选框",
+        },
+        editbox_bet_amount: {
+            type: cc.Node,
+            default: null,
+            tooltip: "下注额",
+        },
     },
 
     // use this for initialization
@@ -20,6 +35,7 @@ cc.Class({
             EventManager.dispatch_event(EVENT.EVENT_NAME_BIG_ROAD_GRIDE_SIZE, GlobalData.gride_size);
         }.bind(this), 0.1);
 
+        this.reset_input_controls();
         //window.app.viewManager.alert("提示框");
     },
 
@@ -28,33 +44,77 @@ cc.Class({
 
     //庄家
     onClickBanker(event, event_data) {
+        //获取输入控件值
+        var value = this.get_value_from_input_controls();
+
+        var result_area = EnumDefine.AREA_TYPE.BANKER;
+        if (value.is_banker_pair) {
+            result_area = result_area | EnumDefine.AREA_TYPE.BANKER_PAIR;
+        }
+        if (value.is_player_pair) {
+            result_area = result_area | EnumDefine.AREA_TYPE.PLAYER_PAIR;
+        }
+        var bet_amount = value.bet_amount;
+        this.reset_input_controls();
+
+        //
         var virtul_bet_area = GlobalData.virtual_node.bet_area;
-        var node_item = { number: -1, bet_area: virtul_bet_area, bet_amount: 100, result_area: EnumDefine.AREA_TYPE.BANKER, };
-        node_item.number = BigRoad.total_node_cnt()+1;
+        var node_item = { number: -1, bet_area: virtul_bet_area, bet_amount: bet_amount, result_area: result_area, };
+        node_item.number = BigRoad.total_node_cnt() + 1;
         BigRoad.push(node_item);
 
         EventManager.dispatch_event(EVENT.EVENT_NAME_BIG_ROAD_BANKER_NODE, node_item.number);
         EventManager.dispatch_event(EVENT.EVENT_NAME_QUERY_VIRTUAL_NODE, null);
+        EventManager.dispatch_event(EVENT.EVENT_NAME_BIG_ROAD_UPDATE_CNT,null);
     },
     //闲家
     onClickPlayer(event, event_data) {
+        //获取输入控件值
+        var value = this.get_value_from_input_controls();
+
+        var result_area = EnumDefine.AREA_TYPE.PLAYER;
+        if (value.is_banker_pair) {
+            result_area = result_area | EnumDefine.AREA_TYPE.BANKER_PAIR;
+        }
+        if (value.is_player_pair) {
+            result_area = result_area | EnumDefine.AREA_TYPE.PLAYER_PAIR;
+        }
+        var bet_amount = value.bet_amount;
+        this.reset_input_controls();
+
+        //
         var virtul_bet_area = GlobalData.virtual_node.bet_area;
-        var node_item = { number: -1, bet_area: virtul_bet_area, bet_amount: 200, result_area: EnumDefine.AREA_TYPE.PLAYER, };
-        node_item.number = BigRoad.total_node_cnt()+1;
+        var node_item = { number: -1, bet_area: virtul_bet_area, bet_amount: bet_amount, result_area: result_area, };
+        node_item.number = BigRoad.total_node_cnt() + 1;
         BigRoad.push(node_item);
 
         EventManager.dispatch_event(EVENT.EVENT_NAME_BIG_ROAD_PLAYER_NODE, node_item.number);
         EventManager.dispatch_event(EVENT.EVENT_NAME_QUERY_VIRTUAL_NODE, null);
+        EventManager.dispatch_event(EVENT.EVENT_NAME_BIG_ROAD_UPDATE_CNT,null);
     },
     //和
     onClickTie(event, event_data) {
+        //获取输入控件值
+        var value = this.get_value_from_input_controls();
+
+        var result_area = EnumDefine.AREA_TYPE.TIE;
+        if (value.is_banker_pair) {
+            result_area = result_area | EnumDefine.AREA_TYPE.BANKER_PAIR;
+        }
+        if (value.is_player_pair) {
+            result_area = result_area | EnumDefine.AREA_TYPE.PLAYER_PAIR;
+        }
+        this.reset_input_controls();
+
+        //
         var virtul_bet_area = GlobalData.virtual_node.bet_area;
-        var node_item = { number: -1, bet_area: virtul_bet_area, bet_amount: 0, result_area: EnumDefine.AREA_TYPE.TIE, };
-        node_item.number = BigRoad.total_node_cnt()+1;
+        var node_item = { number: -1, bet_area: virtul_bet_area, bet_amount: 0, result_area: result_area, };
+        node_item.number = BigRoad.total_node_cnt() + 1;
         BigRoad.push(node_item);
 
         EventManager.dispatch_event(EVENT.EVENT_NAME_BIG_ROAD_TIE_NODE, node_item.number);
         EventManager.dispatch_event(EVENT.EVENT_NAME_QUERY_VIRTUAL_NODE, null);
+        EventManager.dispatch_event(EVENT.EVENT_NAME_BIG_ROAD_UPDATE_CNT,null);
     },
     //撤销
     onClickErase(event, event_data) {
@@ -66,6 +126,7 @@ cc.Class({
 
         EventManager.dispatch_event(EVENT.EVENT_NAME_BIG_ROAD_ERASE_NODE, node_cnt);
         EventManager.dispatch_event(EVENT.EVENT_NAME_QUERY_VIRTUAL_NODE, null);
+        EventManager.dispatch_event(EVENT.EVENT_NAME_BIG_ROAD_UPDATE_CNT,null);
     },
     //清空
     onClickReset(event, event_data) {
@@ -77,6 +138,7 @@ cc.Class({
 
         EventManager.dispatch_event(EVENT.EVENT_NAME_BIG_ROAD_RESET, null);
         EventManager.dispatch_event(EVENT.EVENT_NAME_QUERY_VIRTUAL_NODE, null);
+        EventManager.dispatch_event(EVENT.EVENT_NAME_BIG_ROAD_UPDATE_CNT,null);
     },
     //动态修改size
     onClickMoreBigger(event, event_data) {
@@ -91,5 +153,30 @@ cc.Class({
         GlobalData.gride_size.width -= 10;
         GlobalData.gride_size.height -= 10;
         EventManager.dispatch_event(EVENT.EVENT_NAME_BIG_ROAD_GRIDE_SIZE, GlobalData.gride_size);
+    },
+    //获取输入
+    get_value_from_input_controls() {
+        //庄对闲对
+        var toggle_banker = this.toggle_banker_pair.getComponent(cc.Toggle);
+        var is_banker_pair = toggle_banker.isChecked;
+
+        var toggle_playerer = this.toggle_player_pair.getComponent(cc.Toggle);
+        var is_player_pair = toggle_playerer.isChecked;
+
+        var editbox_bet = this.editbox_bet_amount.getComponent(cc.EditBox);
+        var bet_amount = Number(editbox_bet.string);
+
+        return { is_banker_pair: is_banker_pair, is_player_pair: is_player_pair, bet_amount: bet_amount };
+    },
+    //重置输入控件
+    reset_input_controls() {
+        var toggle_banker = this.toggle_banker_pair.getComponent(cc.Toggle);
+        toggle_banker.isChecked = false;
+
+        var toggle_player = this.toggle_player_pair.getComponent(cc.Toggle);
+        toggle_player.isChecked = false;
+
+        var editbox_bet = this.editbox_bet_amount.getComponent(cc.EditBox);
+        editbox_bet.string = "";
     },
 });

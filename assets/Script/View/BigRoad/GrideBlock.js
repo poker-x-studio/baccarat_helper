@@ -2,13 +2,13 @@
 功能：网格区块
 说明：
 */
-var CONSTANTS = require("Constants");
-var EVENT = require("Event");
+const EVENT = require("Event");
 var EventManager = require("EventManager");
 var BigRoad = require("BigRoad");
 var GlobalData = require("GlobalData");
 var Strategy_bet_area = require("Strategy_bet_area");
 var Strategy_bet_amount = require("Strategy_bet_amount");
+const CONSTANTS = require("../../Model/Constants");
 
 var GRIDE_LINE_CLR = new cc.Color().fromHEX('#DCDCDC');
 var GRIDE_LINE_WIDTH = 2;
@@ -40,7 +40,7 @@ cc.Class({
             type: cc.Node,
             default: null,
             tooltip: "大路虚拟节点",
-        },        
+        },
     },
 
     onLoad() {
@@ -148,7 +148,7 @@ cc.Class({
         var gride_params = this.cal_gride_area_params(GlobalData.gride_size);
 
         //索引
-        var index_prefab = window.app.resManager.get_prefab_bigroad_index();
+        var index_prefab = window.app.resManager.get_prefab(CONSTANTS.PREFAB_BIGROAD_INDEX);
         //x轴
         for (var i = 0; i <= gride_params.line_width / gride_params.gride_width; i++) {
             //新实例
@@ -180,7 +180,7 @@ cc.Class({
         var gride_params = this.cal_gride_area_params(GlobalData.gride_size);
         var total_number = 1;
         //大路节点预制件
-        var node_prefab = window.app.resManager.get_prefab_bigroad_node();
+        var node_prefab = window.app.resManager.get_prefab(CONSTANTS.PREFAB_BIGROAD_NODE);
 
         for (var i = 0; i < BigRoad.col_cnt(); i++) {
             var col = BigRoad.get_col(i);
@@ -208,8 +208,8 @@ cc.Class({
     },
     //绘制虚拟节点
     draw_virtual_node() {
-        if(GlobalData.virtual_node == null){
-            return ;
+        if (GlobalData.virtual_node == null) {
+            return;
         }
 
         //网格区域参数
@@ -217,7 +217,7 @@ cc.Class({
         //大路虚拟节点预制件
         var is_first_creat = false;
         if (this.prefab_virtual_node == null) {
-            var node_prefab = window.app.resManager.get_prefab_bigroad_virtual_node();
+            var node_prefab = window.app.resManager.get_prefab(CONSTANTS.PREFAB_BIGROAD_VIRTUAL_NODE);
             //新实例
             this.prefab_virtual_node = cc.instantiate(node_prefab);
             is_first_creat = true;
@@ -245,7 +245,7 @@ cc.Class({
         var gride_params = this.cal_gride_area_params(GlobalData.gride_size);
         var total_number = 1;
         //大路节点预制件
-        var node_prefab = window.app.resManager.get_prefab_bigroad_node();
+        var node_prefab = window.app.resManager.get_prefab(CONSTANTS.PREFAB_BIGROAD_NODE);
 
         for (var i = 0; i < BigRoad.col_cnt(); i++) {
             var col = BigRoad.get_col(i);
@@ -296,7 +296,7 @@ cc.Class({
         //下注额
         var node_list = BigRoad.dump_nodes();
         var bet_amount = Strategy_bet_amount.query_bet_amount(node_list);
-        
+
         //下注区
         var bet_area = Strategy_bet_area.query_bet_area();
 
@@ -313,7 +313,7 @@ cc.Class({
         var pos = this.find_node_position(BigRoad, total_cnt);
         GlobalData.virtual_node.x = pos.x;
         GlobalData.virtual_node.y = pos.y;
-        
+
         //删除虚拟节点
         BigRoad.pop();
 
@@ -350,7 +350,7 @@ cc.Class({
         //this.draw_virtual_node();
     },
     //查找节点的坐标
-    find_node_position(bigroad, target_number){
+    find_node_position(bigroad, target_number) {
         //网格区域参数
         var gride_params = this.cal_gride_area_params(GlobalData.gride_size);
 
@@ -363,12 +363,12 @@ cc.Class({
                 if (target_number == total_number) {
                     var x = gride_params.left + (i + 1) * gride_params.gride_width - gride_params.gride_width / 2;
                     var y = gride_params.top - (j + 1) * gride_params.gride_height + gride_params.gride_height / 2;
-                    return {x:x,y:y};
+                    return { x: x, y: y };
                 }
                 total_number += 1;
             }
         }
-        return {x:0,y:0};
+        return { x: 0, y: 0 };
     },
 
 });

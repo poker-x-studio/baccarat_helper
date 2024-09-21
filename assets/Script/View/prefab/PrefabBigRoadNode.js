@@ -53,7 +53,7 @@ cc.Class({
             //斜线
             ctx.moveTo(-r, -r);
             ctx.lineTo(r, r);
-            ctx.stroke();  
+            ctx.stroke();
         } else {//庄闲
             if (this.result_area & EnumDefine.AREA_TYPE.BANKER) {
                 circle_clr = CONSTANTS.CLR_BANKER;
@@ -93,7 +93,13 @@ cc.Class({
             this.label_bet_amount.node.active = false;
             this.label_check.node.active = false;
         } else {//庄闲
-            this.label_bet_amount.getComponent(cc.Label).string = "" + bet_amount;
+            //没有下注就隐藏
+            if (bet_amount <= 0) {
+                this.label_bet_amount.getComponent(cc.Label).string = "";
+            } else {
+                this.label_bet_amount.getComponent(cc.Label).string = "" + bet_amount;
+            }
+
             if ((bet_area & EnumDefine.AREA_TYPE.BANKER) && (result_area & EnumDefine.AREA_TYPE.BANKER)) {
                 this.label_check.node.color = new cc.Color().fromHEX('#00FF00');
                 this.label_check.getComponent(cc.Label).string = "✓";

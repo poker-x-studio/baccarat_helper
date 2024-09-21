@@ -14,6 +14,11 @@ var CONSTANTS = {
     //空心圆线宽
     CIRCLE_LINE_WIDTH: 6,
 
+    //预制件
+    PREFAB_BIGROAD_NODE: "prefab/prefabBigRoadNode",
+    PREFAB_BIGROAD_VIRTUAL_NODE: "prefab/prefabBigRoadVirtualNode",
+    PREFAB_BIGROAD_INDEX: "prefab/prefabBigRoadIndex",
+    PREFAB_BANKER:"prefab/prefabBanker",
 };
 
 

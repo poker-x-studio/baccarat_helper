@@ -2,26 +2,17 @@
 功能：资源管理
 说明：
 */
+var CONSTANTS = require("Constants");
 
 cc.Class({
     extends: cc.Component,
 
     properties: {
-        prefab_bigroad_node: {
-            type: cc.Prefab,
-            default: null,
-            tooltip: "大路节点预制件",
+        prefab_list:{
+            default: {},
+            tooltip: "预制件列表"
         },
-        prefab_bigroad_virtual_node: {
-            type: cc.Prefab,
-            default: null,
-            tooltip: "大路虚拟节点预制件",
-        },
-        prefab_bigroad_index: {
-            type: cc.Prefab,
-            default: null,
-            tooltip: "大路索引预制件",
-        },
+
         json: {
             default: {},
             tooltip: "关卡json配置文件"
@@ -33,78 +24,44 @@ cc.Class({
     },
 
     onLoad() {
+        this.prefab_list = {};
     },
 
-    //加载大路节点预制件
-    load_prefab_bigroad_node() {
+    //预加载所有预制件
+    preload_prefab(){
+        var prefab_name_list = [
+            CONSTANTS.PREFAB_BIGROAD_NODE,
+            CONSTANTS.PREFAB_BIGROAD_VIRTUAL_NODE,
+            CONSTANTS.PREFAB_BIGROAD_INDEX,
+            CONSTANTS.PREFAB_BANKER,
+        ];
+        for(var i=0; i<prefab_name_list.length; i++){
+            this.load_prefab(prefab_name_list[i]);
+        }
+    },
+    //加载
+    load_prefab(prefab_name) {
         cc.assetManager.loadBundle("Resources", function (err, bundle) {
             var self = this;
             if (err) {
                 console.log('cc.assetManager.loadBundle err : ', err);
                 return;
             }
-            bundle.load("prefab/prefabBigRoadNode", cc.prefab, function (err, prefab) {
+            bundle.load(prefab_name, cc.prefab, function (err, prefab) {
                 if (err) {
                     console.log('bundle.load err : ', err);
                     return;
                 }
-                self.prefab_bigroad_node = prefab;
+                self.prefab_list[prefab_name] = prefab;
             }.bind(self));
-        }.bind(this));
+        }.bind(this));        
     },
-    get_prefab_bigroad_node(){
-        if(this.prefab_bigroad_node == null){
-            this.load_prefab_bigroad_node();
+    //获取
+    get_prefab(prefab_name) {
+        if(this.prefab_list[prefab_name] == null){
+             this.load_prefab(prefab_name);
         }
-        return this.prefab_bigroad_node;
-    },
-
-    //加载大路虚拟节点预制件
-    load_prefab_bigroad_virtual_node() {
-        cc.assetManager.loadBundle("Resources", function (err, bundle) {
-            var self = this;
-            if (err) {
-                console.log('cc.assetManager.loadBundle err : ', err);
-                return;
-            }
-            bundle.load("prefab/prefabBigRoadVirtualNode", cc.prefab, function (err, prefab) {
-                if (err) {
-                    console.log('bundle.load err : ', err);
-                    return;
-                }
-                self.prefab_bigroad_virtual_node = prefab;
-            }.bind(self));
-        }.bind(this));
-    },
-    get_prefab_bigroad_virtual_node(){
-        if(this.prefab_bigroad_virtual_node == null){
-            this.load_prefab_bigroad_virtual_node();
-        }
-        return this.prefab_bigroad_virtual_node;
-    },
-
-    //加载大路索引预制件
-    load_prefab_bigroad_index() {
-        cc.assetManager.loadBundle("Resources", function (err, bundle) {
-            var self = this;
-            if (err) {
-                console.log('cc.assetManager.loadBundle err : ', err);
-                return;
-            }
-            bundle.load("prefab/prefabBigRoadIndex", cc.prefab, function (err, prefab) {
-                if (err) {
-                    console.log('bundle.load err : ', err);
-                    return;
-                }
-                self.prefab_bigroad_index = prefab;
-            }.bind(self));
-        }.bind(this));
-    },   
-    get_prefab_bigroad_index(){
-        if(this.prefab_bigroad_index == null){
-            this.load_prefab_bigroad_index();
-        }
-        return this.prefab_bigroad_index;
+        return this.prefab_list[prefab_name];
     },
 
     //加载配置文件

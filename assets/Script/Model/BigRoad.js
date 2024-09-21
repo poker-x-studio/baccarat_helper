@@ -43,7 +43,7 @@ var BigRoad = {
 
         //最后一列
         var last_col = this.last_col()
-        if ((last_col.result_area()==node_item.result_area) || (node_item.result_area==EnumDefine.AREA_TYPE.TIE)) {//结果区相等或和
+        if ((last_col.result_area()==node_item.result_area) || (node_item.result_area&EnumDefine.AREA_TYPE.TIE)) {//结果区相等或和
             last_col.push(node_item)
         } else { //新创建一列
             var col = new Col();
@@ -99,6 +99,30 @@ var BigRoad = {
             }
         }
         return list;
+    },
+    //统计个数
+    stat_cnt(){
+        var nodes = this.dump_nodes();
+        var info = {banker_cnt:0,player_cnt:0,tie_cnt:0,banker_pair_cnt:0,player_pair_cnt:0,};
+        for(var i=0; i<nodes.length; i++){
+            var node = nodes[i];
+            if(node.result_area & EnumDefine.AREA_TYPE.BANKER){
+                info.banker_cnt++;
+            }
+            if(node.result_area & EnumDefine.AREA_TYPE.PLAYER){
+                info.player_cnt++;
+            }
+            if(node.result_area & EnumDefine.AREA_TYPE.TIE){
+                info.tie_cnt++;
+            }
+            if(node.result_area & EnumDefine.AREA_TYPE.BANKER_PAIR){
+                info.banker_pair_cnt++;
+            }
+            if(node.result_area & EnumDefine.AREA_TYPE.PLAYER_PAIR){
+                info.player_pair_cnt++;
+            }
+        }
+        return info;
     },
     //总节点数
     total_node_cnt() {

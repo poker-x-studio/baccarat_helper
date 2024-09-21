@@ -10,7 +10,7 @@ cc.Class({
             type: cc.Node,
             default: null,
             tooltip: "统计区块",
-        },        
+        },
         gride_block: {
             type: cc.Node,
             default: null,
