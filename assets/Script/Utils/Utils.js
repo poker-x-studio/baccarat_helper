@@ -6,8 +6,8 @@ const Utils = {};
 
 //得到子节点屏幕坐标
 Utils.childNodeWorldSpace = function (node) {
-	if(node==null){
-		return cc.v2(0,0);
+	if (node == null) {
+		return cc.v2(0, 0);
 	}
 	var ls = cc.v2(node.x, node.y);
 	var ws = node.parent.convertToWorldSpaceAR(ls);

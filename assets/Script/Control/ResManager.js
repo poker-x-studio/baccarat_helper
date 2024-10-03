@@ -21,38 +21,53 @@ cc.Class({
             default: {},
             tooltip: "关卡图集"
         },
+
+        res_total_cnt :0, //资源总个数
+        prefab_name_list:[],//预制件名称
     },
 
     onLoad() {
+        this.res_total_cnt = 0;
         this.prefab_list = {};
     },
 
     //预加载所有预制件
     preload_prefab(){
-        var prefab_name_list = [
+        this.prefab_name_list = [
+            CONSTANTS.PREFAB_ALERT,
             CONSTANTS.PREFAB_BIGROAD_NODE,
             CONSTANTS.PREFAB_BIGROAD_VIRTUAL_NODE,
             CONSTANTS.PREFAB_BIGROAD_INDEX,
             CONSTANTS.PREFAB_BANKER,
         ];
-        for(var i=0; i<prefab_name_list.length; i++){
-            this.load_prefab(prefab_name_list[i]);
+        for(var i=0; i<this.prefab_name_list.length; i++){
+            this.load_prefab(this.prefab_name_list[i]);
         }
     },
     //加载
-    load_prefab(prefab_name) {
+    load_prefab(prefab_name, cb) {
+        if(this.prefab_list[prefab_name] != null){
+            if(cb != null){//回调
+                cb(this.prefab_list[prefab_name]);
+            }
+            return ;
+        }
         cc.assetManager.loadBundle("Resources", function (err, bundle) {
             var self = this;
             if (err) {
-                console.log('cc.assetManager.loadBundle err : ', err);
+                console.error(CONSTANTS.TAG,'cc.assetManager.loadBundle err : ', err, ',prefab_name:',prefab_name);
                 return;
             }
             bundle.load(prefab_name, cc.prefab, function (err, prefab) {
                 if (err) {
-                    console.log('bundle.load err : ', err);
+                    console.error(CONSTANTS.TAG,'bundle.load err : ', err, ',prefab_name:',prefab_name);
                     return;
                 }
                 self.prefab_list[prefab_name] = prefab;
+                console.log(CONSTANTS.TAG, '加载预制件,成功: ', prefab_name);
+                if(cb != null){//回调
+                    cb(self.prefab_list[prefab_name]);
+                }
             }.bind(self));
         }.bind(this));        
     },
@@ -62,6 +77,23 @@ cc.Class({
              this.load_prefab(prefab_name);
         }
         return this.prefab_list[prefab_name];
+    },
+
+    //获取记载进度
+    get_load_progress(){
+        //资源总个数
+        this.res_total_cnt = this.prefab_name_list.length;
+
+        //计算已经加载个数
+        var res_loaded_cnt = 0;
+        for(var i=0; i<this.prefab_name_list.length; i++){
+            var prefab_name = this.prefab_name_list[i];
+            if(this.prefab_list[prefab_name] != null){
+                res_loaded_cnt++;
+            }
+        }
+        console.log(CONSTANTS.TAG, "this.res_total_cnt:", this.res_total_cnt, ",res_loaded_cnt:", res_loaded_cnt);
+        return res_loaded_cnt/this.res_total_cnt;
     },
 
     //加载配置文件

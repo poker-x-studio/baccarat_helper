@@ -2,6 +2,8 @@
 功能：公共视图管理
 说明：
 */  
+var CONSTANTS = require("Constants");
+
 var ALERT_ZINDEX = 100;
 
 cc.Class({
@@ -142,21 +144,12 @@ cc.Class({
 
     //弹窗
     alert(text) {
-        cc.assetManager.loadBundle("Resources", function (err, bundle) {
-            if (err) {
-                console.log('cc.assetManager.loadBundle err : ', err);
-                return;
-            }
-            bundle.load("prefab/prefabAlert", cc.prefab, function (err, prefab) {
-                if (err) {
-                    console.log('bundle.load err : ', err);
-                    return;
-                }
-                var alert = cc.instantiate(prefab);
-                alert.getComponent('PrefabAlert').setText(text);
-                cc.find('Canvas').addChild(alert, ALERT_ZINDEX);
-            })
-        })
+        var alert_prefab = window.app.resManager.get_prefab(CONSTANTS.PREFAB_ALERT);
+        if (alert_prefab != null) {
+            var alert = cc.instantiate(alert_prefab);
+            alert.getComponent('PrefabAlert').setText(text);
+            cc.find('Canvas').addChild(alert, ALERT_ZINDEX);
+        }
     }, 
 
     //面板显示动作

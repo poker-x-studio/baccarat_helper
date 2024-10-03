@@ -3,13 +3,14 @@
 说明：大路是列的容器
 */
 var EnumDefine = require("EnumDefine");
-
+var CONSTANTS = require("Constants");
 var Col = require("Col");
 
 //节点
 var node_item = { number: 0, bet_amount: 0, bet_area: 0, result_area: 0, };
 
-var BigRoad = {
+cc.Class({
+    extends: cc.Component,
 
     properties: {
         //大路-列
@@ -25,7 +26,7 @@ var BigRoad = {
     init() {
         this.cols = [];
     },
-
+    
     //队尾插入
     push(node_item) {
         if (this.cols == null) {
@@ -132,6 +133,26 @@ var BigRoad = {
         }
         return total_cnt
     },
-};
-
-module.exports = BigRoad;
+    //当前盈利
+    profit() {
+        var total_profit = 0;
+        var nodes = this.dump_nodes();
+        for(var i=0; i<nodes.length; i++){
+            var node = nodes[i];
+            if((node.bet_area & node.result_area) > 0){
+                total_profit += node.bet_amount;
+            } else {
+                total_profit -= node.bet_amount;
+            }
+        }        
+        return total_profit;
+    },
+    //输出
+    print() {
+        var nodes = this.dump_nodes();
+        for(var i=0; i<nodes.length; i++){
+            var node = nodes[i];
+            console.log(CONSTANTS.TAG, "nodes[", i , "]=", "{bet_area:", node.bet_area,",bet_amount:", node.bet_amount,",result_area:", node.result_area,"}");
+        }
+    },
+});

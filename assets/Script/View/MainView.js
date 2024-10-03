@@ -7,6 +7,7 @@ var BigRoad = require("BigRoad");
 var EVENT = require("Event");
 var EventManager = require("EventManager");
 var GlobalData = require("GlobalData");
+const CONSTANTS = require("Constants");
 
 cc.Class({
     extends: cc.Component,
@@ -31,9 +32,11 @@ cc.Class({
 
     // use this for initialization
     onLoad: function () {
+        console.log(CONSTANTS.TAG, "MainView.onLoad(),");
+
         this.scheduleOnce(function () {
             EventManager.dispatch_event(EVENT.EVENT_NAME_BIG_ROAD_GRIDE_SIZE, GlobalData.gride_size);
-        }.bind(this), 0.1);
+        }.bind(this), 0.5);
 
         this.reset_input_controls();
         //window.app.viewManager.alert("提示框");
@@ -44,6 +47,8 @@ cc.Class({
 
     //庄家
     onClickBanker(event, event_data) {
+        console.log(CONSTANTS.TAG, "onClickBanker()");
+
         //获取输入控件值
         var value = this.get_value_from_input_controls();
 
@@ -60,8 +65,8 @@ cc.Class({
         //
         var virtul_bet_area = GlobalData.virtual_node.bet_area;
         var node_item = { number: -1, bet_area: virtul_bet_area, bet_amount: bet_amount, result_area: result_area, };
-        node_item.number = BigRoad.total_node_cnt() + 1;
-        BigRoad.push(node_item);
+        node_item.number = GlobalData.big_road.total_node_cnt() + 1;
+        GlobalData.big_road.push(node_item);
 
         EventManager.dispatch_event(EVENT.EVENT_NAME_BIG_ROAD_BANKER_NODE, node_item.number);
         EventManager.dispatch_event(EVENT.EVENT_NAME_QUERY_VIRTUAL_NODE, null);
@@ -69,6 +74,8 @@ cc.Class({
     },
     //闲家
     onClickPlayer(event, event_data) {
+        console.log(CONSTANTS.TAG, "onClickPlayer()");
+
         //获取输入控件值
         var value = this.get_value_from_input_controls();
 
@@ -85,15 +92,17 @@ cc.Class({
         //
         var virtul_bet_area = GlobalData.virtual_node.bet_area;
         var node_item = { number: -1, bet_area: virtul_bet_area, bet_amount: bet_amount, result_area: result_area, };
-        node_item.number = BigRoad.total_node_cnt() + 1;
-        BigRoad.push(node_item);
-
+        node_item.number = GlobalData.big_road.total_node_cnt() + 1;
+        GlobalData.big_road.push(node_item);
+                       
         EventManager.dispatch_event(EVENT.EVENT_NAME_BIG_ROAD_PLAYER_NODE, node_item.number);
         EventManager.dispatch_event(EVENT.EVENT_NAME_QUERY_VIRTUAL_NODE, null);
         EventManager.dispatch_event(EVENT.EVENT_NAME_BIG_ROAD_UPDATE_CNT,null);
     },
     //和
     onClickTie(event, event_data) {
+        console.log(CONSTANTS.TAG, "onClickTie()");
+
         //获取输入控件值
         var value = this.get_value_from_input_controls();
 
@@ -109,8 +118,8 @@ cc.Class({
         //
         var virtul_bet_area = GlobalData.virtual_node.bet_area;
         var node_item = { number: -1, bet_area: virtul_bet_area, bet_amount: 0, result_area: result_area, };
-        node_item.number = BigRoad.total_node_cnt() + 1;
-        BigRoad.push(node_item);
+        node_item.number = GlobalData.big_road.total_node_cnt() + 1;
+        GlobalData.big_road.push(node_item);
 
         EventManager.dispatch_event(EVENT.EVENT_NAME_BIG_ROAD_TIE_NODE, node_item.number);
         EventManager.dispatch_event(EVENT.EVENT_NAME_QUERY_VIRTUAL_NODE, null);
@@ -118,11 +127,13 @@ cc.Class({
     },
     //撤销
     onClickErase(event, event_data) {
-        var node_cnt = BigRoad.total_node_cnt();
+        console.log(CONSTANTS.TAG, "onClickErase()");
+
+        var node_cnt = GlobalData.big_road.total_node_cnt();
         if (node_cnt <= 0) {
             return;
         }
-        BigRoad.pop();
+        GlobalData.big_road.pop();
 
         EventManager.dispatch_event(EVENT.EVENT_NAME_BIG_ROAD_ERASE_NODE, node_cnt);
         EventManager.dispatch_event(EVENT.EVENT_NAME_QUERY_VIRTUAL_NODE, null);
@@ -130,11 +141,13 @@ cc.Class({
     },
     //清空
     onClickReset(event, event_data) {
-        var node_cnt = BigRoad.total_node_cnt();
+        console.log(CONSTANTS.TAG, "onClickReset()");
+
+        var node_cnt = GlobalData.big_road.total_node_cnt();
         if (node_cnt <= 0) {
             return;
         }
-        BigRoad.reset();
+        GlobalData.big_road.reset();
 
         EventManager.dispatch_event(EVENT.EVENT_NAME_BIG_ROAD_RESET, null);
         EventManager.dispatch_event(EVENT.EVENT_NAME_QUERY_VIRTUAL_NODE, null);
@@ -142,12 +155,17 @@ cc.Class({
     },
     //动态修改size
     onClickMoreBigger(event, event_data) {
+        console.log(CONSTANTS.TAG, "onClickMoreBigger()");  
+
         GlobalData.gride_size.width += 10;
         GlobalData.gride_size.height += 10;
         EventManager.dispatch_event(EVENT.EVENT_NAME_BIG_ROAD_GRIDE_SIZE, GlobalData.gride_size);
     },
     onClickMoreSmaller(event, event_data) {
+        console.log(CONSTANTS.TAG+"onClickMoreSmaller()");  
+
         if (GlobalData.gride_size.width <= 10) {
+            console.warn(CONSTANTS.TAG, "onClickMoreSmaller(),GlobalData.gride_size.width:", GlobalData.gride_size.width);  
             return;
         }
         GlobalData.gride_size.width -= 10;

@@ -182,8 +182,8 @@ cc.Class({
         //大路节点预制件
         var node_prefab = window.app.resManager.get_prefab(CONSTANTS.PREFAB_BIGROAD_NODE);
 
-        for (var i = 0; i < BigRoad.col_cnt(); i++) {
-            var col = BigRoad.get_col(i);
+        for (var i = 0; i < GlobalData.big_road.col_cnt(); i++) {
+            var col = GlobalData.big_road.get_col(i);
 
             for (var j = 0; j < col.node_cnt(); j++) {
                 var node_item = col.get_node(j);
@@ -247,8 +247,8 @@ cc.Class({
         //大路节点预制件
         var node_prefab = window.app.resManager.get_prefab(CONSTANTS.PREFAB_BIGROAD_NODE);
 
-        for (var i = 0; i < BigRoad.col_cnt(); i++) {
-            var col = BigRoad.get_col(i);
+        for (var i = 0; i < GlobalData.big_road.col_cnt(); i++) {
+            var col = GlobalData.big_road.get_col(i);
 
             for (var j = 0; j < col.node_cnt(); j++) {
                 var node_item = col.get_node(j);
@@ -293,31 +293,39 @@ cc.Class({
     },
     //事件处理-查询虚拟节点
     onEventQueryVirtualNode(event_name, udata) {
+        //测试打印
+        GlobalData.big_road.print();
+
+        var node_list = GlobalData.big_road.dump_nodes();
+
         //下注额
-        var node_list = BigRoad.dump_nodes();
         var bet_amount = Strategy_bet_amount.query_bet_amount(node_list);
-
         //下注区
-        var bet_area = Strategy_bet_area.query_bet_area();
-
+        var suggestion = Strategy_bet_area.query_bet_area(node_list);
+        var bet_area = suggestion.bet_area;
+        
         //虚拟节点
         GlobalData.virtual_node.bet_area = bet_area;
         GlobalData.virtual_node.result_area = bet_area;
         GlobalData.virtual_node.bet_amount = bet_amount;
 
         //插入虚拟节点
-        BigRoad.push(GlobalData.virtual_node);
+        GlobalData.big_road.push(GlobalData.virtual_node);
 
         //计算虚拟节点的坐标
-        var total_cnt = BigRoad.total_node_cnt();
-        var pos = this.find_node_position(BigRoad, total_cnt);
+        var total_cnt = GlobalData.big_road.total_node_cnt();
+        var pos = this.find_node_position(GlobalData.big_road, total_cnt);
         GlobalData.virtual_node.x = pos.x;
         GlobalData.virtual_node.y = pos.y;
 
         //删除虚拟节点
-        BigRoad.pop();
+        GlobalData.big_road.pop();
 
         this.draw_virtual_node();
+
+        //提示信息
+        suggestion.bet_amount = bet_amount;
+        EventManager.dispatch_event(EVENT.EVENT_NAME_BIG_ROAD_TIP,suggestion);
     },
     //事件处理-网格size
     onEventBigRoadGrideSize(event_name, udata) {

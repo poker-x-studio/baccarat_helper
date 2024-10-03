@@ -100,13 +100,15 @@ cc.Class({
                 this.label_bet_amount.getComponent(cc.Label).string = "" + bet_amount;
             }
 
-            if ((bet_area & EnumDefine.AREA_TYPE.BANKER) && (result_area & EnumDefine.AREA_TYPE.BANKER)) {
+            if ((bet_area & result_area) > 0) {    
                 this.label_check.node.color = new cc.Color().fromHEX('#00FF00');
                 this.label_check.getComponent(cc.Label).string = "✓";
             } else {
                 this.label_check.node.color = new cc.Color().fromHEX('#FF0000');
                 this.label_check.getComponent(cc.Label).string = "x";
             }
+
+            //
         }
 
         this.bet_area = bet_area;

@@ -33,7 +33,7 @@ cc.Class({
 
     //设置虚拟开牌结果
     setResult(bet_area, bet_amount) {
-        this.label_bet_amount.getComponent(cc.Label).string = "" + bet_amount;
+        this.label_bet_amount.getComponent(cc.Label).string = "下注:" + bet_amount;
         this.bet_area = bet_area;
         this.draw_circle();
 

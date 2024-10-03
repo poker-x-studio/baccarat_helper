@@ -23,6 +23,7 @@ cc.Class({
 
     //设置结果
     setResult(bet_area) {
+        console.log(CONSTANTS.TAG, "setResult(),bet_area:", bet_area);
         this.bet_area = bet_area;
         if (bet_area & EnumDefine.AREA_TYPE.BANKER) {
             this.label.getComponent(cc.Label).string = "庄";

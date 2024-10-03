@@ -4,7 +4,7 @@
 */  
 var CONSTANTS = {
     //测试tag
-    TAG: "baccarat_helper-danny,JS project,",
+    TAG: "baccarat_helper,JS project,",
     //庄颜色
     CLR_BANKER: new cc.Color().fromHEX('#FF0000'),
     //闲颜色
@@ -13,8 +13,11 @@ var CONSTANTS = {
     CLR_TIE: new cc.Color().fromHEX('#98C047'),
     //空心圆线宽
     CIRCLE_LINE_WIDTH: 6,
+    //启动时间
+    LAUNCH_TIME: 5,
 
     //预制件
+    PREFAB_ALERT: "prefab/prefabAlert",
     PREFAB_BIGROAD_NODE: "prefab/prefabBigRoadNode",
     PREFAB_BIGROAD_VIRTUAL_NODE: "prefab/prefabBigRoadVirtualNode",
     PREFAB_BIGROAD_INDEX: "prefab/prefabBigRoadIndex",
