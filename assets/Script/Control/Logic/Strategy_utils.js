@@ -8,8 +8,8 @@ var BigRoad = require("BigRoad");
 var StrategyUtils = {};
 
 //是否是获胜节点 
-StrategyUtils.is_win_node = function (node_item) {
-    //console.log(CONSTANTS.TAG, "StrategyUtils.is_win_node(),node_item:", node_item);
+StrategyUtils.isWinNode = function (node_item) {
+    //console.log(CONSTANTS.TAG, "StrategyUtils.isWinNode(),node_item:", node_item);
     if ((node_item.bet_area & node_item.result_area) > 0) {
         return true;
     }
@@ -17,8 +17,8 @@ StrategyUtils.is_win_node = function (node_item) {
 }
 
 //是否和节点
-StrategyUtils.is_tie_node = function (node_item) {
-    //console.log(CONSTANTS.TAG, "StrategyUtils.is_tie_node(),node_item:", node_item);
+StrategyUtils.isTieNode = function (node_item) {
+    //console.log(CONSTANTS.TAG, "StrategyUtils.isTieNode(),node_item:", node_item);
     if ((node_item.result_area & EnumDefine.AREA_TYPE.TIE) > 0) {
         return true;
     }
@@ -26,12 +26,12 @@ StrategyUtils.is_tie_node = function (node_item) {
 }
 
 //去除和节点
-StrategyUtils.exclude_tie_nodes = function (node_list) {
+StrategyUtils.excludeTieNodes = function (node_list) {
     //去除和节点
     var nodes = [];
     for (var i = 0; i < node_list.length; i++) {
         var node = node_list[i];
-        if (this.is_tie_node(node)) {
+        if (this.isTieNode(node)) {
             continue;
         }
         nodes[nodes.length] = node;
@@ -40,7 +40,7 @@ StrategyUtils.exclude_tie_nodes = function (node_list) {
 }
 
 //是否同一种结果区
-StrategyUtils.is_same_area_type = function (node_list) {
+StrategyUtils.isSameAreaType = function (node_list) {
     if(node_list.length <= 1){
         return false;
     }
@@ -65,15 +65,15 @@ StrategyUtils.NewBigRoadWithNodes = function (nodes) {
 };
 
 // 提取需要的列,列节点数分布情况
-StrategyUtils.extract_col_nodes = function (big_road, check_col_cnt) {
+StrategyUtils.extractColNodes = function (big_road, check_col_cnt) {
 	var col_nodes = [];
-	var col_cnt = big_road.col_cnt();
+	var col_cnt = big_road.colCnt();
 	if (check_col_cnt > col_cnt) {
 		return { is_ok: false, col_nodes: null };
 	}
 
 	for (var i = col_cnt - check_col_cnt; i < col_cnt; i++) {
-		col_nodes[col_nodes.length] = big_road.get_col(i).node_cnt();
+		col_nodes[col_nodes.length] = big_road.getCol(i).nodeCnt();
 	}
 
 	return { is_ok: true, col_nodes: col_nodes };

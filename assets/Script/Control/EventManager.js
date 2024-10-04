@@ -7,7 +7,7 @@ var EventManager = {
     _dir: {},
     // 记录保存我们的订阅者;
     // handler(event_name, udata)
-    add_listener(event_name, handler) { // 订阅事件
+    addListener(event_name, handler) { // 订阅事件
         if (this._dir[event_name]) {
             this._dir[event_name].push(handler);
         }
@@ -16,7 +16,7 @@ var EventManager = {
         }
     },
 
-    dispatch_event(event_name, udata) { // 发送事件
+    dispatchEvent(event_name, udata) { // 发送事件
         if (!this._dir[event_name]) {
             return;
         }
@@ -26,7 +26,7 @@ var EventManager = {
         }
     },
 
-    remove_listener(event_name, handler) { // 取消订阅
+    removeListener(event_name, handler) { // 取消订阅
         if (!this._dir[event_name]) {
             return;
         }

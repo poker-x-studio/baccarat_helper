@@ -32,9 +32,9 @@ cc.Class({
         } else if (bet_area & EnumDefine.AREA_TYPE.TIE) {
             this.label.getComponent(cc.Label).string = "和";
         }
-        this.draw_circle();
+        this.drawCircle();
     },
-    draw_circle() {
+    drawCircle() {
         //circle 宽高半径
         var width_circle = this.node.width;
         var height_circle = this.node.height;

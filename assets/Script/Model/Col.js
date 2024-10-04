@@ -29,7 +29,7 @@ cc.Class({
     },
 
     //当前列的结果区
-    result_area() {
+    resultArea() {
         if (this.nodes.length <= 0) {
             return EnumDefine.AREA_TYPE.NULL;
         }
@@ -37,12 +37,12 @@ cc.Class({
     },
 
     //列中的节点个数
-    node_cnt() {
+    nodeCnt() {
         return this.nodes.length;
     },
 
     //获取节点
-    get_node(index) {
+    getNode(index) {
         if ((index < 0) || (index >= this.nodes.length)) {
             return nil
         }

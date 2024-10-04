@@ -144,7 +144,7 @@ cc.Class({
 
     //弹窗
     alert(text) {
-        var alert_prefab = window.app.resManager.get_prefab(CONSTANTS.PREFAB_ALERT);
+        var alert_prefab = window.app.resManager.getPrefab(CONSTANTS.PREFAB_ALERT);
         if (alert_prefab != null) {
             var alert = cc.instantiate(alert_prefab);
             alert.getComponent('PrefabAlert').setText(text);
@@ -154,7 +154,7 @@ cc.Class({
 
     //面板显示动作
     //inOut:是否是显示
-    show_panel_action(view, during, inOut, cb) {
+    showPanelAction(view, during, inOut, cb) {
         var start_pos = cc.v2(0, 3000);
         var end_pos = cc.v2(0, 0);
         

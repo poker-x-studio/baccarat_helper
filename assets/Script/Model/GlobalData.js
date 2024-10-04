@@ -2,7 +2,6 @@
 功能：全局变量
 说明：
 */
-var CONSTANTS = require("Constants");
 var BigRoad = require("BigRoad");
 
 var GlobalData = {

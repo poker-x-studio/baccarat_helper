@@ -32,10 +32,10 @@ cc.Class({
         if (this.cols == null) {
             this.init();
         }
-        this._push_element(node_item);
+        this._pushElement(node_item);
     },
-    _push_element(node_item) {
-        if (this.col_cnt() == 0) {
+    _pushElement(node_item) {
+        if (this.colCnt() == 0) {
             var col = new Col();
             col.push(node_item)
             this.cols.push(col);
@@ -43,8 +43,8 @@ cc.Class({
         }
 
         //最后一列
-        var last_col = this.last_col()
-        if ((last_col.result_area()==node_item.result_area) || (node_item.result_area&EnumDefine.AREA_TYPE.TIE)) {//结果区相等或和
+        var last_col = this.lastCol()
+        if ((last_col.resultArea()==node_item.result_area) || (node_item.result_area&EnumDefine.AREA_TYPE.TIE)) {//结果区相等或和
             last_col.push(node_item)
         } else { //新创建一列
             var col = new Col();
@@ -54,11 +54,11 @@ cc.Class({
     },
     //删除最后的列
     pop() {
-        if (this.col_cnt() == 0) {
+        if (this.colCnt() == 0) {
             return;
         }
-        var last_col = this.last_col();
-        if(last_col.node_cnt() == 1) {
+        var last_col = this.lastCol();
+        if(last_col.nodeCnt() == 1) {
             this.cols.pop();
         } else{
             last_col.pop();
@@ -69,41 +69,41 @@ cc.Class({
         this.init();
     },
     //列数
-    col_cnt() {
+    colCnt() {
         if (this.cols == null) {
             return 0;
         }
         return this.cols.length;
     },
     //获取列
-    get_col(col_index) {
-        if ((col_index < 0) || (col_index >= this.col_cnt())) {
+    getCol(col_index) {
+        if ((col_index < 0) || (col_index >= this.colCnt())) {
             return null;
         }
         return this.cols[col_index];
     },
     //最后的一列
-    last_col() {
-        if (this.col_cnt() == 0) {
+    lastCol() {
+        if (this.colCnt() == 0) {
             return;
         }
         return this.cols[this.cols.length - 1];
     },
     //所有的节点
-    dump_nodes() {
+    dumpNodes() {
         var list = [];
-        for (var i = 0; i < this.col_cnt(); i++) {
+        for (var i = 0; i < this.colCnt(); i++) {
             var col = this.cols[i];
 
-            for (var j = 0; j < col.node_cnt(); j++) {
-                list[list.length] = col.get_node(j);
+            for (var j = 0; j < col.nodeCnt(); j++) {
+                list[list.length] = col.getNode(j);
             }
         }
         return list;
     },
     //统计个数
-    stat_cnt(){
-        var nodes = this.dump_nodes();
+    statCnt(){
+        var nodes = this.dumpNodes();
         var info = {banker_cnt:0,player_cnt:0,tie_cnt:0,banker_pair_cnt:0,player_pair_cnt:0,};
         for(var i=0; i<nodes.length; i++){
             var node = nodes[i];
@@ -126,17 +126,17 @@ cc.Class({
         return info;
     },
     //总节点数
-    total_node_cnt() {
+    totalNodeCnt() {
         var total_cnt = 0
-        for (var col_index = 0; col_index < this.col_cnt(); col_index++) {
-            total_cnt += this.get_col(col_index).node_cnt()
+        for (var col_index = 0; col_index < this.colCnt(); col_index++) {
+            total_cnt += this.getCol(col_index).nodeCnt()
         }
         return total_cnt
     },
     //当前盈利
     profit() {
         var total_profit = 0;
-        var nodes = this.dump_nodes();
+        var nodes = this.dumpNodes();
         for(var i=0; i<nodes.length; i++){
             var node = nodes[i];
             if((node.bet_area & node.result_area) > 0){
@@ -149,7 +149,7 @@ cc.Class({
     },
     //输出
     print() {
-        var nodes = this.dump_nodes();
+        var nodes = this.dumpNodes();
         for(var i=0; i<nodes.length; i++){
             var node = nodes[i];
             console.log(CONSTANTS.TAG, "nodes[", i , "]=", "{bet_area:", node.bet_area,",bet_amount:", node.bet_amount,",result_area:", node.result_area,"}");

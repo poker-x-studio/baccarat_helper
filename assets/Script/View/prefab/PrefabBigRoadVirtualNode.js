@@ -35,7 +35,7 @@ cc.Class({
     setResult(bet_area, bet_amount) {
         this.label_bet_amount.getComponent(cc.Label).string = "下注:" + bet_amount;
         this.bet_area = bet_area;
-        this.draw_circle();
+        this.drawCircle();
 
         cc.tween(this.node)
         .repeatForever(
@@ -49,7 +49,7 @@ cc.Class({
     },
 
     //画圆
-    draw_circle() {
+    drawCircle() {
         //circle 宽高半径
         var width_circle = this.circle.node.width;
         var height_circle = this.circle.node.height;

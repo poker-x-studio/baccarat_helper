@@ -47,7 +47,7 @@ Utils.completeAssign = function (target, ...sources) {
 };
 
 //获取随机数
-Utils.GetRandomNum = function (minNum, maxNum) {
+Utils.getRandomNum = function (minNum, maxNum) {
 	switch (arguments.length) {
 		case 1:
 			return parseInt(Math.random() * minNum + 1, 10);

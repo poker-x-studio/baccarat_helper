@@ -13,8 +13,6 @@ var CONSTANTS = {
     CLR_TIE: new cc.Color().fromHEX('#98C047'),
     //空心圆线宽
     CIRCLE_LINE_WIDTH: 6,
-    //启动时间
-    LAUNCH_TIME: 5,
 
     //预制件
     PREFAB_ALERT: "prefab/prefabAlert",

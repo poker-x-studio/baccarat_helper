@@ -20,7 +20,7 @@ var EnumDefine = {
         PLAYER_PAIR: 0x08,//闲对
         BANKER_PAIR: 0x10,//庄对
     }),
-    area_type_2_string(area_type){
+    areaType2String(area_type){
         var list = [
             {area:this.AREA_TYPE.NULL,str:"无效"},
             {area:this.AREA_TYPE.PLAYER,str:"闲"},

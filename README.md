@@ -12,3 +12,29 @@
 
 ## 三 github commit之间比较
  https://github.com/poker-x-studio/baccarat_helper/compare/49c83f4..1abff3f
+
+
+ ## 四 编码规范
+ - 4.1 变量名 小写+下划线 
+    ```
+    unit_bet_money: 0,//每单元下注额
+    ```
+ - 4.2 函数名 小驼峰法标识, 即除第一个单词之外，其他单词首字母大写（ lowerCamelCase）
+  ```
+  areaType2String(area_type){
+  },
+  ``` 
+ - 4.3 变量或函数前加_ 表示私有
+  ```
+  var EventManager = {
+    _dir: {},//变量
+  };
+
+  _pushElement(node_item) {//函数
+  },
+  ```
+ - 4.4 常量 (如 PI) 为大写 (UPPERCASE )
+  ```
+  //测试tag
+  TAG: "baccarat_helper,JS project,",
+  ```

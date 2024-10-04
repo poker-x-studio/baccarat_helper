@@ -33,7 +33,7 @@ cc.Class({
         cc.debug.setDisplayStats(false);
 
         //预加载资源
-        this.preload_res();
+        this.preloadRes();
 
         //初始化
         GlobalData.init();
@@ -47,14 +47,14 @@ cc.Class({
     },
 
     //预加载资源
-    preload_res() {
-        console.log(CONSTANTS.TAG, 'preload_res()');
+    preloadRes() {
+        console.log(CONSTANTS.TAG, 'preloadRes()');
 
         //预加载
-        window.app.resManager.preload_prefab();
+        window.app.resManager.preloadPrefab();
 
         //debug测试
-        //this.debug_test();
+        //this.debugTest();
     },
 
     //显示视图
@@ -80,6 +80,6 @@ cc.Class({
         }
     }, 
     //debug测试
-    debug_test() {
+    debugTest() {
     },
 });

@@ -56,7 +56,7 @@ cc.Class({
     },
 
     onLoad() {
-        this.update_cnt();
+        this.updateCnt();
         this.scheduleOnce(function () {
             this.draw();
         }.bind(this), 0.5);
@@ -84,7 +84,7 @@ cc.Class({
             var item = {}
             item.handler = event_handle[i];
             item.event_name = event_name[i];
-            EventManager.add_listener(item.event_name, item.handler);
+            EventManager.addListener(item.event_name, item.handler);
             this.eventHandler.push(item)
         }
     },
@@ -92,7 +92,7 @@ cc.Class({
     eventUnregister() {
         for (var i = 0; i < this.eventHandler.length; i++) {
             var item = this.eventHandler[i]
-            EventManager.remove_listener(item.event_name, item.handler);
+            EventManager.removeListener(item.event_name, item.handler);
         }
         this.eventHandler = []
     },
@@ -105,10 +105,10 @@ cc.Class({
         var label_total_cnt_space = 300;
         var node_space = 230;
         var x_space = 5;
-        var node_prefab = window.app.resManager.get_prefab(CONSTANTS.PREFAB_BANKER);
+        var node_prefab = window.app.resManager.getPrefab(CONSTANTS.PREFAB_BANKER);
 
         //庄
-        banker_node = cc.instantiate(node_prefab);
+        var banker_node = cc.instantiate(node_prefab);
         banker_node.x = left_x + label_total_cnt_space - 120;
         banker_node.y = 0;
         banker_node.getComponent('PrefabBanker').setResult(EnumDefine.AREA_TYPE.BANKER);
@@ -116,7 +116,7 @@ cc.Class({
         this.label_banker_cnt.node.x = banker_node.x + banker_node.width / 2 + x_space;
 
         //闲
-        player_node = cc.instantiate(node_prefab);
+        var player_node = cc.instantiate(node_prefab);
         player_node.x = banker_node.x + node_space;
         player_node.y = 0;
         player_node.getComponent('PrefabBanker').setResult(EnumDefine.AREA_TYPE.PLAYER);
@@ -124,7 +124,7 @@ cc.Class({
         this.label_player_cnt.node.x = player_node.x + player_node.width / 2 + x_space;
 
         //和
-        tie_node = cc.instantiate(node_prefab);
+        var tie_node = cc.instantiate(node_prefab);
         tie_node.x = player_node.x + node_space;;
         tie_node.y = 0;
         tie_node.getComponent('PrefabBanker').setResult(EnumDefine.AREA_TYPE.TIE);
@@ -140,10 +140,10 @@ cc.Class({
         this.label_tip.node.x = this.label_total_cnt.node.x;
     },
     //更新个数
-    update_cnt() {
-        var stat = GlobalData.big_road.stat_cnt();
-        var total_cnt = GlobalData.big_road.total_node_cnt();
-        this.label_total_cnt.string = "Total Games " + GlobalData.big_road.total_node_cnt();
+    updateCnt() {
+        var stat = GlobalData.big_road.statCnt();
+        var total_cnt = GlobalData.big_road.totalNodeCnt();
+        this.label_total_cnt.string = "Total Games " + GlobalData.big_road.totalNodeCnt();
         if (total_cnt > 0) {
             this.label_banker_cnt.string = "Banker " + stat.banker_cnt + " [" + ((stat.banker_cnt / total_cnt) * 100).toFixed(2) + "%]";
             this.label_player_cnt.string = "Player " + stat.player_cnt + " [" + ((stat.player_cnt / total_cnt) * 100).toFixed(2) + "%]";
@@ -161,12 +161,12 @@ cc.Class({
 
     //事件处理-更新个数
     onEventBigRoadUpdateCnt(event_name, udata) {
-        this.update_cnt();
+        this.updateCnt();
     },
     //事件处理-设置提示信息
     onEventBigRoadTip(event_name, udata) {
         var suggestion = udata;
         var total_profit = GlobalData.big_road.profit();
-        this.label_tip.string = "预测结果: " + EnumDefine.area_type_2_string(suggestion.bet_area) + ",建议下注额:" + suggestion.bet_amount + ',' + suggestion.comment + ',当前盈利:' + total_profit;
+        this.label_tip.string = "预测结果: " + EnumDefine.areaType2String(suggestion.bet_area) + ",建议下注额:" + suggestion.bet_amount + ',' + suggestion.comment + ',当前盈利:' + total_profit;
     },
 });

@@ -13,10 +13,10 @@ const FULL_STYLE = 2 //全形态
 // MM跳形态检测  
 StyleMMJump.checkMMJumpStyle = function (nodes) {
     var handlers = [
-        StyleMMJump._check_single_jump_style,
-        StyleMMJump._check_double_jump_style,
-        StyleMMJump._check_3_jump_style,
-        StyleMMJump._check_4_jump_style,
+        StyleMMJump._checkSingleJumpStyle,
+        StyleMMJump._checkDoubleJumpStyle,
+        StyleMMJump._check3JumpStyle,
+        StyleMMJump._check4JumpStyle,
     ];
 
     for (var i = 0; i < handlers.length; i++) {
@@ -29,7 +29,7 @@ StyleMMJump.checkMMJumpStyle = function (nodes) {
 }
 
 // 单跳形态检测
-StyleMMJump._check_single_jump_style = function (nodes) {
+StyleMMJump._checkSingleJumpStyle = function (nodes) {
     const MIN_NODE_CNT = 2 //最小节点数
     const MIN_COL_CNT = 2  // 最小列数
 
@@ -46,7 +46,7 @@ StyleMMJump._check_single_jump_style = function (nodes) {
         },
     ];
 
-    var check_result = StyleMMJump._check_jump_style(nodes, MIN_NODE_CNT, MIN_COL_CNT, check_items);
+    var check_result = StyleMMJump._checkJumpStyle(nodes, MIN_NODE_CNT, MIN_COL_CNT, check_items);
     if (check_result.is_ok) {
         check_result.suggestion.comment = "检测到_单跳_形态";
         return check_result;
@@ -55,7 +55,7 @@ StyleMMJump._check_single_jump_style = function (nodes) {
 }
 
 // 双跳形态检测
-StyleMMJump._check_double_jump_style = function (nodes) {
+StyleMMJump._checkDoubleJumpStyle = function (nodes) {
     const MIN_NODE_CNT = 4 //最小节点数
     const MIN_COL_CNT = 2  // 最小列数
 
@@ -84,7 +84,7 @@ StyleMMJump._check_double_jump_style = function (nodes) {
         },
     ];
 
-    var check_result = StyleMMJump._check_jump_style(nodes, MIN_NODE_CNT, MIN_COL_CNT, check_items);
+    var check_result = StyleMMJump._checkJumpStyle(nodes, MIN_NODE_CNT, MIN_COL_CNT, check_items);
     if (check_result.is_ok) {
         check_result.suggestion.comment = "检测到_双跳_形态";
         return check_result;
@@ -93,7 +93,7 @@ StyleMMJump._check_double_jump_style = function (nodes) {
 }
 
 // 三跳形态检测
-StyleMMJump._check_3_jump_style = function (nodes) {
+StyleMMJump._check3JumpStyle = function (nodes) {
     const MIN_NODE_CNT = 5 //最小节点数
     const MIN_COL_CNT = 2  // 最小列数
 
@@ -141,7 +141,7 @@ StyleMMJump._check_3_jump_style = function (nodes) {
         },
     ];
 
-    var check_result = StyleMMJump._check_jump_style(nodes, MIN_NODE_CNT, MIN_COL_CNT, check_items);
+    var check_result = StyleMMJump._checkJumpStyle(nodes, MIN_NODE_CNT, MIN_COL_CNT, check_items);
     if (check_result.is_ok) {
         check_result.suggestion.comment = "检测到_三跳_形态";
         return check_result;
@@ -150,7 +150,7 @@ StyleMMJump._check_3_jump_style = function (nodes) {
 }
 
 // 四跳形态检测
-StyleMMJump._check_4_jump_style = function (nodes) {
+StyleMMJump._check4JumpStyle = function (nodes) {
     const MIN_NODE_CNT = 7 //最小节点数
     const MIN_COL_CNT = 2  // 最小列数
 
@@ -208,7 +208,7 @@ StyleMMJump._check_4_jump_style = function (nodes) {
         },
     ];
 
-    var check_result = StyleMMJump._check_jump_style(nodes, MIN_NODE_CNT, MIN_COL_CNT, check_items);
+    var check_result = StyleMMJump._checkJumpStyle(nodes, MIN_NODE_CNT, MIN_COL_CNT, check_items);
     if (check_result.is_ok) {
         check_result.suggestion.comment = "检测到_四跳_形态";
         return check_result;
@@ -216,7 +216,7 @@ StyleMMJump._check_4_jump_style = function (nodes) {
     return { is_ok: false, suggestion: null };
 }
 
-StyleMMJump._check_jump_style = function (nodes, min_node_cnt, min_col_cnt, check_items) {
+StyleMMJump._checkJumpStyle = function (nodes, min_node_cnt, min_col_cnt, check_items) {
 
     //最少节点数校验
     var node_cnt = nodes.length;
@@ -226,7 +226,7 @@ StyleMMJump._check_jump_style = function (nodes, min_node_cnt, min_col_cnt, chec
 
     //最少列数校验
     var big_road_all = StrategyUtils.NewBigRoadWithNodes(nodes)
-    var cols_cnt = big_road_all.col_cnt();
+    var cols_cnt = big_road_all.colCnt();
     if (cols_cnt < min_col_cnt) {
         return { is_ok: false, suggestion: null };
     }
@@ -238,7 +238,7 @@ StyleMMJump._check_jump_style = function (nodes, min_node_cnt, min_col_cnt, chec
         var check_item = check_items[i];
 
         //提取列节点分布情况
-        var extract_result = StrategyUtils.extract_col_nodes(big_road_all, check_item.check_col_cnt);
+        var extract_result = StrategyUtils.extractColNodes(big_road_all, check_item.check_col_cnt);
         if (!extract_result.is_ok) {
             continue
         }
@@ -267,7 +267,7 @@ StyleMMJump._check_jump_style = function (nodes, min_node_cnt, min_col_cnt, chec
             return {
                 is_ok: true, suggestion: {
                     style: EnumDefine.STYLE_TYPE.MM_JUMP,
-                    bet_area: big_road_all.last_col().result_area(),
+                    bet_area: big_road_all.lastCol().resultArea(),
                     comment: "",
                     alart: true,
                 }
@@ -287,7 +287,7 @@ StyleMMJump._check_jump_style = function (nodes, min_node_cnt, min_col_cnt, chec
                 continue
             }
 
-            if (big_road_all.last_col().result_area() == EnumDefine.AREA_TYPE.BANKER) {
+            if (big_road_all.lastCol().resultArea() == EnumDefine.AREA_TYPE.BANKER) {
                 bet_area = EnumDefine.AREA_TYPE.PLAYER;
             } else {
                 bet_area = EnumDefine.AREA_TYPE.BANKER;

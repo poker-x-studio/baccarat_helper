@@ -32,7 +32,7 @@ cc.Class({
     },
 
     //预加载所有预制件
-    preload_prefab(){
+    preloadPrefab(){
         this.prefab_name_list = [
             CONSTANTS.PREFAB_ALERT,
             CONSTANTS.PREFAB_BIGROAD_NODE,
@@ -41,11 +41,11 @@ cc.Class({
             CONSTANTS.PREFAB_BANKER,
         ];
         for(var i=0; i<this.prefab_name_list.length; i++){
-            this.load_prefab(this.prefab_name_list[i]);
+            this.loadPrefab(this.prefab_name_list[i]);
         }
     },
     //加载
-    load_prefab(prefab_name, cb) {
+    loadPrefab(prefab_name, cb) {
         if(this.prefab_list[prefab_name] != null){
             if(cb != null){//回调
                 cb(this.prefab_list[prefab_name]);
@@ -72,15 +72,15 @@ cc.Class({
         }.bind(this));        
     },
     //获取
-    get_prefab(prefab_name) {
+    getPrefab(prefab_name) {
         if(this.prefab_list[prefab_name] == null){
-             this.load_prefab(prefab_name);
+             this.loadPrefab(prefab_name);
         }
         return this.prefab_list[prefab_name];
     },
 
     //获取记载进度
-    get_load_progress(){
+    getLoadProgress(){
         //资源总个数
         this.res_total_cnt = this.prefab_name_list.length;
 
@@ -97,9 +97,9 @@ cc.Class({
     },
 
     //加载配置文件
-    load_json(sid, lid, cb) {
+    loadJson(sid, lid, cb) {
         var path = "config/sessions/S" + sid + "Level" + lid + ".json";
-        //console.log("load_json(),path="+path);
+        //console.log("loadJson(),path="+path);
         if (this.json[path] != null) {//已经加载过
             if (cb != null) {
                 //cc.log("从cache读取：" + path)
@@ -114,7 +114,7 @@ cc.Class({
                     }
                     return;
                 }
-                console.log("load_json(),path=" + path + ",successed");
+                console.log("loadJson(),path=" + path + ",successed");
                 this.json[path] = result.json;
                 if (cb != null) {
                     cb(result.json)
@@ -124,9 +124,9 @@ cc.Class({
     },
 
     //加载图集
-    load_sprite_atlas(sid, cb) {
+    loadSpriteAtlas(sid, cb) {
         var path = SessionConfig[sid].sprite_atlas;
-        //console.log("load_sprite_atlas(),path="+path);
+        //console.log("loadSpriteAtlas(),path="+path);
         if (this.sprite_atlas[path] != null) {//已经加载过
             if (cb != null) {
                 //cc.log("从cache读取：" + path)
@@ -141,7 +141,7 @@ cc.Class({
                     }
                     return;
                 }
-                console.log("load_sprite_atlas(),path=" + path + ",successed");
+                console.log("loadSpriteAtlas(),path=" + path + ",successed");
                 this.sprite_atlas[path] = spriteAtlas;
                 if (cb != null) {
                     cb(spriteAtlas)

@@ -19,7 +19,7 @@ StyleLong.checkLongStyle = function (nodes) {
 
     var start_index = node_cnt - LONG_MIN_NODE_CNT
 	var part_nodes = nodes.slice(start_index, start_index+LONG_MIN_NODE_CNT);	
-	if (!StrategyUtils.is_same_area_type(part_nodes)) {
+	if (!StrategyUtils.isSameAreaType(part_nodes)) {
 		return {is_ok:false,  suggestion:null};  
 	}
 

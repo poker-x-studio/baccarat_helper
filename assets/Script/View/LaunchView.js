@@ -30,7 +30,7 @@ cc.Class({
     },
     //进度条
     _updateProgressBar: function (progressBar, dt) { 
-        var progress = window.app.resManager.get_load_progress();
+        var progress = window.app.resManager.getLoadProgress();
         console.log(CONSTANTS.TAG, "资源加载进度,", progress * 100);
         if (progress == 1) {
             this.label.getComponent(cc.Label).string = "资源加载,完成" + parseInt(progress * 100) + "%";

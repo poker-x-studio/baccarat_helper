@@ -17,7 +17,7 @@ var Strategy_bet_area = {
     init() {
     },
     //查询下注区
-    query_bet_area(big_road_nodes){
+    queryBetArea(big_road_nodes){
         var handlers = [
             StyleMMJump.checkMMJumpStyle,
             StyleLong.checkLongStyle,
@@ -25,9 +25,10 @@ var Strategy_bet_area = {
         ];
     
         //去除和节点
-        var node_list = StrategyUtils.exclude_tie_nodes(big_road_nodes);
+        var node_list = StrategyUtils.excludeTieNodes(big_road_nodes);
 
         //检测
+        var check = null;
         for(var i=0; i<handlers.length; i++ ){
             check = handlers[i](node_list);
             if (check.is_ok == true) {
