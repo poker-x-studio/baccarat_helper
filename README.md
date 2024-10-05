@@ -38,3 +38,7 @@
   //测试tag
   TAG: "baccarat_helper,JS project,",
   ```
+ - 4.5 CocosCreator编辑器中规范
+   - view 一般是 canvas 下一级的界面元素,通常会铺满屏幕
+   - panel 一般是 view 下一级的界面元素
+   - block 一般是 panel 下一级的界面元素
