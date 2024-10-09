@@ -8,6 +8,7 @@ var EVENT = require("Event");
 var EventManager = require("EventManager");
 var GlobalData = require("GlobalData");
 const CONSTANTS = require("Constants");
+var DropDownOptionData = require("DropDownOptionData");
 
 cc.Class({
     extends: cc.Component,
@@ -23,11 +24,22 @@ cc.Class({
             default: null,
             tooltip: "闲对复选框",
         },
-        editbox_bet_amount: {
+        label_bet_amount: {
+            type: cc.Label,
+            default: null,
+            tooltip: "实际下注额",
+        },
+        editbox_base: {
             type: cc.Node,
             default: null,
-            tooltip: "下注额",
+            tooltip: "基础分",
         },
+        drop_down_box: {
+            type: cc.Node,
+            default: null,
+            tooltip: "下拉控件-倍数",
+        },
+        drop_down_box_times: [],    //倍数  
     },
 
     // use this for initialization
@@ -38,11 +50,59 @@ cc.Class({
             EventManager.dispatchEvent(EVENT.EVENT_NAME_BIG_ROAD_GRIDE_SIZE, GlobalData.gride_size);
         }.bind(this), 0.5);
 
+        //下拉列表控件
+        var optionDatas = [];
+        this.drop_down_box_times = [0,];
+
+        for (var i = 0; i <= 10; i++) {
+            this.drop_down_box_times[this.drop_down_box_times.length] = Math.pow(2, i);
+        }
+        for (var i = 0; i < this.drop_down_box_times.length; i++) {
+            var optionData = new DropDownOptionData();
+            optionData.optionString = this.drop_down_box_times[i] + "倍";
+            optionDatas[optionDatas.length] = optionData;
+        }
+        var cmp = this.drop_down_box.getComponent('PrefabDropdownBox');
+        cmp.addOptionDatas(optionDatas);
+        cmp.setSelectedIndex(0);
+
         this.resetInputControls();
         //window.app.viewManager.alert("提示框");
+        this.eventRegister();
+    },
+    onDestroy() {
+        //事件注销
+        this.eventUnregister();
     },
 
     update: function (dt) {
+    },
+
+    //事件注册
+    eventRegister() {
+        this.eventHandler = [];
+        var event_name = [
+            EVENT.EVENT_NAME_DROP_DOWN_BOX_SELECTED,
+        ]
+        var event_handle = [
+            this.onEventDropDownBoxSelected.bind(this),
+        ]
+
+        for (var i = 0; i < event_name.length; i++) {
+            var item = {}
+            item.handler = event_handle[i];
+            item.event_name = event_name[i];
+            EventManager.addListener(item.event_name, item.handler);
+            this.eventHandler.push(item)
+        }
+    },
+    //事件注销
+    eventUnregister() {
+        for (var i = 0; i < this.eventHandler.length; i++) {
+            var item = this.eventHandler[i]
+            EventManager.removeListener(item.event_name, item.handler);
+        }
+        this.eventHandler = []
     },
 
     //庄家
@@ -70,7 +130,7 @@ cc.Class({
 
         EventManager.dispatchEvent(EVENT.EVENT_NAME_BIG_ROAD_BANKER_NODE, node_item.number);
         EventManager.dispatchEvent(EVENT.EVENT_NAME_QUERY_VIRTUAL_NODE, null);
-        EventManager.dispatchEvent(EVENT.EVENT_NAME_BIG_ROAD_UPDATE_CNT,null);
+        EventManager.dispatchEvent(EVENT.EVENT_NAME_BIG_ROAD_UPDATE_CNT, null);
     },
     //闲家
     onClickPlayer(event, event_data) {
@@ -94,10 +154,10 @@ cc.Class({
         var node_item = { number: -1, bet_area: virtul_bet_area, bet_amount: bet_amount, result_area: result_area, };
         node_item.number = GlobalData.big_road.totalNodeCnt() + 1;
         GlobalData.big_road.push(node_item);
-                       
+
         EventManager.dispatchEvent(EVENT.EVENT_NAME_BIG_ROAD_PLAYER_NODE, node_item.number);
         EventManager.dispatchEvent(EVENT.EVENT_NAME_QUERY_VIRTUAL_NODE, null);
-        EventManager.dispatchEvent(EVENT.EVENT_NAME_BIG_ROAD_UPDATE_CNT,null);
+        EventManager.dispatchEvent(EVENT.EVENT_NAME_BIG_ROAD_UPDATE_CNT, null);
     },
     //和
     onClickTie(event, event_data) {
@@ -123,7 +183,7 @@ cc.Class({
 
         EventManager.dispatchEvent(EVENT.EVENT_NAME_BIG_ROAD_TIE_NODE, node_item.number);
         EventManager.dispatchEvent(EVENT.EVENT_NAME_QUERY_VIRTUAL_NODE, null);
-        EventManager.dispatchEvent(EVENT.EVENT_NAME_BIG_ROAD_UPDATE_CNT,null);
+        EventManager.dispatchEvent(EVENT.EVENT_NAME_BIG_ROAD_UPDATE_CNT, null);
     },
     //撤销
     onClickErase(event, event_data) {
@@ -137,7 +197,7 @@ cc.Class({
 
         EventManager.dispatchEvent(EVENT.EVENT_NAME_BIG_ROAD_ERASE_NODE, node_cnt);
         EventManager.dispatchEvent(EVENT.EVENT_NAME_QUERY_VIRTUAL_NODE, null);
-        EventManager.dispatchEvent(EVENT.EVENT_NAME_BIG_ROAD_UPDATE_CNT,null);
+        EventManager.dispatchEvent(EVENT.EVENT_NAME_BIG_ROAD_UPDATE_CNT, null);
     },
     //清空
     onClickReset(event, event_data) {
@@ -151,21 +211,21 @@ cc.Class({
 
         EventManager.dispatchEvent(EVENT.EVENT_NAME_BIG_ROAD_RESET, null);
         EventManager.dispatchEvent(EVENT.EVENT_NAME_QUERY_VIRTUAL_NODE, null);
-        EventManager.dispatchEvent(EVENT.EVENT_NAME_BIG_ROAD_UPDATE_CNT,null);
+        EventManager.dispatchEvent(EVENT.EVENT_NAME_BIG_ROAD_UPDATE_CNT, null);
     },
     //动态修改size
     onClickMoreBigger(event, event_data) {
-        console.log(CONSTANTS.TAG, "onClickMoreBigger()");  
+        console.log(CONSTANTS.TAG, "onClickMoreBigger()");
 
         GlobalData.gride_size.width += 10;
         GlobalData.gride_size.height += 10;
         EventManager.dispatchEvent(EVENT.EVENT_NAME_BIG_ROAD_GRIDE_SIZE, GlobalData.gride_size);
     },
     onClickMoreSmaller(event, event_data) {
-        console.log(CONSTANTS.TAG+"onClickMoreSmaller()");  
+        console.log(CONSTANTS.TAG, "onClickMoreSmaller()");
 
         if (GlobalData.gride_size.width <= 10) {
-            console.warn(CONSTANTS.TAG, "onClickMoreSmaller(),GlobalData.gride_size.width:", GlobalData.gride_size.width);  
+            console.warn(CONSTANTS.TAG, "onClickMoreSmaller(),GlobalData.gride_size.width:", GlobalData.gride_size.width);
             return;
         }
         GlobalData.gride_size.width -= 10;
@@ -181,8 +241,14 @@ cc.Class({
         var toggle_playerer = this.toggle_player_pair.getComponent(cc.Toggle);
         var is_player_pair = toggle_playerer.isChecked;
 
-        var editbox_bet = this.editbox_bet_amount.getComponent(cc.EditBox);
-        var bet_amount = Number(editbox_bet.string);
+        //基础分
+        var editbox_base = this.editbox_base.getComponent(cc.EditBox);
+        //倍数
+        var cmp = this.drop_down_box.getComponent('PrefabDropdownBox');
+        var selected_index = cmp.getSelectedIndex();
+
+        var base_score = Number(editbox_base.string);
+        var bet_amount = base_score * this.drop_down_box_times[selected_index];
 
         return { is_banker_pair: is_banker_pair, is_player_pair: is_player_pair, bet_amount: bet_amount };
     },
@@ -193,8 +259,23 @@ cc.Class({
 
         var toggle_player = this.toggle_player_pair.getComponent(cc.Toggle);
         toggle_player.isChecked = false;
+    },
 
-        var editbox_bet = this.editbox_bet_amount.getComponent(cc.EditBox);
-        editbox_bet.string = "";
+    //事件处理-下拉列表控件 选择
+    onEventDropDownBoxSelected(event_name, udata) {
+        //基础分
+        var editbox_base = this.editbox_base.getComponent(cc.EditBox);
+        //倍数
+        var cmp = this.drop_down_box.getComponent('PrefabDropdownBox');
+        var selected_index = cmp.getSelectedIndex();
+
+        var base_score = Number(editbox_base.string);
+        var bet_amount = base_score * this.drop_down_box_times[selected_index];
+        
+        this.label_bet_amount.getComponent(cc.Label).string = "实际下注额:" + bet_amount;
+
+        //更新虚拟节点
+        GlobalData.unit_bet_money = base_score;//基础分
+        EventManager.dispatchEvent(EVENT.EVENT_NAME_QUERY_VIRTUAL_NODE, null);
     },
 });
